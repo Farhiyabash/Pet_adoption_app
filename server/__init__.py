@@ -1,18 +1,21 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_marshmallow import Marshmallow
+from .config import Config  # Use relative import
 
+# Initialize extensions
 db = SQLAlchemy()
-migrate = Migrate()
+ma = Marshmallow()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('server.config.Config')  
+    app.config.from_object(Config)
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    ma.init_app(app)
 
+    # Import models and create the database tables
     with app.app_context():
-        from . import routes  
-        db.create_all()  
+        db.create_all()
+
     return app
