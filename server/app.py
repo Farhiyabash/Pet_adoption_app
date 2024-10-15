@@ -1,23 +1,30 @@
-#!/usr/bin/env python3
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
-# Standard library imports
+db = SQLAlchemy()
+ma = Marshmallow()
+bcrypt = Bcrypt()
+jwt = JWTManager()
 
-# Remote library imports
-from flask import request
-from flask_restful import Resource
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config.Config')
 
-# Local imports
-from config import app, db, api
-# Add your model imports
+    db.init_app(app)
+    ma.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
 
+    with app.app_context():
+        from . import models
+        db.create_all()
 
-# Views go here!
+    return app
 
-@app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
-
+app = create_app()
 
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
-
+    app.run(debug=True)
