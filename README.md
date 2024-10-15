@@ -33,15 +33,17 @@ If you have any ideas, improvements, or bug fixes, please feel free to submit a 
 
  ## Technologies Used
 
-This project was created using 
+This project was created using :
+-
+................
 
 
  ## Authors
- 
- Farhiya Bashir
- Markjoe Gicheru
- Arnold Karoki 	
- Laban Githinji
- Dennis Kabatha
+ - Farhiya Bashir
+ - Markjoe Gicheru
+ - Arnold Karoki
+ - Laban Githinji
+ - Dennis Kabatha
+
 
 
