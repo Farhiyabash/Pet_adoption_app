@@ -4,27 +4,27 @@
 
  ## Project Description
 
-For this project, we will be 
+For this project, we will be ...........
 
 
  ## Installment Instructions
 
-
+..................
 
  ## Usage 
 
 
-
+.........................
 
 
 ## Key Features
 
 
-
+.........................
 
  ## Contributing 
 
-Any contributions to the interactive shopping list project are welcome.
+Any contributions to the project are welcome.
 If you have any ideas, improvements, or bug fixes, please feel free to submit a pull request by :
 1. Forking the repository, 
 2. Creating a new branch for your fix,
@@ -36,10 +36,12 @@ If you have any ideas, improvements, or bug fixes, please feel free to submit a 
 This project was created using 
 
 
- ## AuthorS 
+ ## Authors
  
  Farhiya Bashir
+ Markjoe Gicheru
+ Arnold Karoki 	
+ Laban Githinji
+ Dennis Kabatha
 
- ## Contact Information 
- 
- 
+
