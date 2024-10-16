@@ -13,4 +13,5 @@ const PetCard = ({ pet }) => {
         </div>
     );
 };
+
 export default PetCard;
