@@ -6,10 +6,11 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 
 def create_app():
-    app = Flask(__name__)
-    
-    #Enable CORS for all routes 
+    app = Flask(__name__) 
+
+    # Enable CORS for all routes
     CORS(app)
+
     # Configure the app
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pets.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
