@@ -1,0 +1,120 @@
+/* Global resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+/* Container for consistent width */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Navbar styles */
+nav {
+  background-color: #333;
+  padding: 15px;
+  text-align: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+}
+
+nav a:hover {
+  background-color: #555;
+}
+
+/* PetList styles */
+.pet-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.pet-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: calc(33.333% - 20px);
+}
+
+.pet-card img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+/* PetDetails styles */
+.pet-details {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+.pet-details img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.pet-details h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.pet-details p {
+  color: #666;
+}
+
+/* EditPetForm styles */
+.form-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  margin: 20px auto;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .pet-card {
+    width: 100%; /* Full width on mobile devices */
+  }
+}
