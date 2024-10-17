@@ -5,17 +5,17 @@ import './Reviews.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Reviews = () => {
-  const [reviews, setReviews] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [customerReviews, setCustomerReviews] = useState([]);
+  const [userProfiles, setUserProfiles] = useState([]);
   const [reviewContent, setReviewContent] = useState('');
   const [reviewRating, setReviewRating] = useState(5);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
-  const petId = 1; // Replace with actual pet ID
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
+  const petId = 1; 
 
-  // Updated emojis array with more options
-  const emojis = ['😊', '😍', '🔥', '❤️', '😢', '😡', '😂', '✨', '👍', '🎉'];
+  // Array of emoji options
+  const emojiOptions = ['😊', '😍', '🔥', '❤️', '😢', '😡', '😂', '✨', '👍', '🎉'];
 
   useEffect(() => {
     const fetchReviewsAndUsers = async () => {
@@ -38,11 +38,11 @@ const Reviews = () => {
           liked: false,
         }));
 
-        setReviews(initializedReviews);
-        setUsers(usersData);
+        setCustomerReviews(initializedReviews);
+        setUserProfiles(usersData);
       } catch (error) {
         console.error('Error fetching reviews or users:', error);
-        setError('Could not load reviews.');
+        setErrorMessage('Could not load reviews.');
       } finally {
         setLoading(false);
       }
@@ -51,26 +51,24 @@ const Reviews = () => {
     fetchReviewsAndUsers();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleReviewSubmission = async (e) => {
     e.preventDefault();
     if (!reviewContent.trim()) {
-      setError('Review content cannot be empty.');
+      setErrorMessage('Review content cannot be empty.');
       return;
     }
 
-    // Check if users array is empty before attempting to pick a random user
-    if (users.length === 0) {
-      setError('No users available to submit a review.');
+    if (userProfiles.length === 0) {
+      setErrorMessage('No users available to submit a review.');
       return;
     }
 
-    // Randomly select a user from the list of users
-    const randomUserId = users[Math.floor(Math.random() * users.length)].id;
+    const randomUserId = userProfiles[Math.floor(Math.random() * userProfiles.length)].id;
 
     const newReview = {
       content: reviewContent,
       rating: reviewRating,
-      user_id: randomUserId, // Use random user ID
+      user_id: randomUserId,
       pet_id: petId,
       likes: 0,
     };
@@ -89,18 +87,18 @@ const Reviews = () => {
       }
 
       const data = await response.json();
-      setReviews((prevReviews) => [...prevReviews, { ...data, liked: false }]);
+      setCustomerReviews((prevReviews) => [...prevReviews, { ...data, liked: false }]);
       setReviewContent('');
       setReviewRating(5);
-      setError(null);
+      setErrorMessage(null);
     } catch (error) {
       console.error('Error submitting review:', error);
-      setError('Could not submit review.');
+      setErrorMessage('Could not submit review.');
     }
   };
 
-  const handleLikeClick = async (reviewId) => {
-    const updatedReviews = reviews.map((review) => {
+  const handleLikeToggle = async (reviewId) => {
+    const updatedReviews = customerReviews.map((review) => {
       if (review.id === reviewId) {
         const newLikedStatus = !review.liked;
         return {
@@ -112,7 +110,7 @@ const Reviews = () => {
       return review;
     });
 
-    setReviews(updatedReviews);
+    setCustomerReviews(updatedReviews);
 
     try {
       await fetch(`http://127.0.0.1:5000/reviews/${reviewId}/like`, {
@@ -123,7 +121,7 @@ const Reviews = () => {
     }
   };
 
-  const handleDeleteReview = async (reviewId) => {
+  const handleReviewDeletion = async (reviewId) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/reviews/${reviewId}`, {
         method: 'DELETE',
@@ -133,31 +131,37 @@ const Reviews = () => {
         throw new Error('Network response was not ok');
       }
 
-      setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+      setCustomerReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
     } catch (error) {
       console.error('Error deleting review:', error);
-      setError('Could not delete review.');
+      setErrorMessage('Could not delete review.');
     }
   };
 
   const toggleEmojiPicker = () => {
-    setEmojiPickerVisible((prev) => !prev);
+    setIsEmojiPickerVisible((prev) => !prev);
   };
 
-  const addEmoji = (emoji) => {
+  const addEmojiToReview = (emoji) => {
     setReviewContent((prevContent) => prevContent + emoji);
-    setEmojiPickerVisible(false); // Close the picker after selecting an emoji
+    setIsEmojiPickerVisible(false);
   };
 
   if (loading) {
-    return <div>Loading reviews...</div>;
+    return (
+      <div className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container">
-      <h1 className="my-4">Reviews from Our Users"</h1>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <form onSubmit={handleSubmit} className="mb-4">
+    <div className="container mt-4" >
+      <h1 className="text-center mb-4">Customer Reviews</h1>
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      <form onSubmit={handleReviewSubmission} className="mb-4 border p-3 rounded shadow-sm">
         <div className="mb-3">
           <label htmlFor="review" className="form-label">Your Review</label>
           <div className="input-group">
@@ -166,20 +170,21 @@ const Reviews = () => {
               onChange={setReviewContent}
               theme="snow"
               modules={{ toolbar: false }}
-              className="review-input flex-grow-1"
+              className="review-input flex-grow-1 border"
+              placeholder="Write your review here..."
             />
             <div className="emoji-container">
               <button type="button" className="btn btn-light emoji-btn" onClick={toggleEmojiPicker}>
-                😊 {/* Default emoji shown */}
+                😊
               </button>
-              {emojiPickerVisible && (
-                <div className="emoji-picker">
-                  {emojis.map((emoji) => (
+              {isEmojiPickerVisible && (
+                <div className="emoji-picker shadow-sm">
+                  {emojiOptions.map((emoji) => (
                     <button
                       key={emoji}
                       type="button"
-                      className="emoji-option"
-                      onClick={() => addEmoji(emoji)}
+                      className="emoji-option btn btn-light"
+                      onClick={() => addEmojiToReview(emoji)}
                     >
                       {emoji}
                     </button>
@@ -201,19 +206,19 @@ const Reviews = () => {
             onChange={(e) => setReviewRating(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-      </form>
+        <button type="submit" className="btn btn-success">Submit</button>
+        </form>
       <div className="reviews-list mt-4">
         <h2>Existing Reviews</h2>
-        {reviews.length === 0 ? (
+        {customerReviews.length === 0 ? (
           <p>No reviews yet.</p>
         ) : (
-          reviews.map((review) => {
-            const user = users.find((user) => user.id === review.user_id);
+          customerReviews.map((review) => {
+            const user = userProfiles.find((user) => user.id === review.user_id);
             return (
-              <div key={review.id} className="review mb-4 p-3 border rounded">
+              <div key={review.id} className="review mb-4 p-3 border rounded shadow-sm">
                 <div dangerouslySetInnerHTML={{ __html: review.content }} />
-                <p>
+                <p className="mt-2">
                   <small>
                     Rating: {review.rating} | By: {user ? user.name : 'Anonymous'}
                   </small>
@@ -221,13 +226,13 @@ const Reviews = () => {
                 <div className="review-actions">
                   <button
                     className={`btn ${review.liked ? 'btn-success' : 'btn-outline-success'} me-2`}
-                    onClick={() => handleLikeClick(review.id)}
+                    onClick={() => handleLikeToggle(review.id)}
                   >
                     <i className="fas fa-thumbs-up"></i> {review.likes}
                   </button>
                   <button
                     className="btn btn-danger me-2"
-                    onClick={() => handleDeleteReview(review.id)}
+                    onClick={() => handleReviewDeletion(review.id)}
                   >
                     <i className="fas fa-trash-alt"></i> Delete
                   </button>
