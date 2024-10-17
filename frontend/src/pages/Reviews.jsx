@@ -209,7 +209,7 @@ const Reviews = () => {
         <button type="submit" className="btn btn-success">Submit</button>
         </form>
       <div className="reviews-list mt-4">
-        <h2>Existing Reviews</h2>
+        <h2>User Reviews</h2>
         {customerReviews.length === 0 ? (
           <p>No reviews yet.</p>
         ) : (
