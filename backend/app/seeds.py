@@ -81,4 +81,25 @@ with app.app_context():
 
     db.session.commit()
 
+    # seed reviews
+    reviews = [
+    {'pet_id': 1, 'user_id': 1, 'rating': 5, 'comment': 'Lovely pet! Highly recommend.'},
+    {'pet_id': 2, 'user_id': 2, 'rating': 4, 'comment': 'Very friendly but a bit shy.'},
+    {'pet_id': 3, 'user_id': 1, 'rating': 3, 'comment': 'Not as energetic as expected.'},
+    {'pet_id': 4, 'user_id': 3, 'rating': 5, 'comment': 'Perfect companion!'},
+    {'pet_id': 5, 'user_id': 2, 'rating': 2, 'comment': 'Needs more attention than I can provide.'}
+]
+    
+for review in reviews:
+    new_review = review(
+        pet_id=review['pet_id'],
+        user_id=review['user_id'],
+        rating=review['rating'],
+        comment=review['comment']
+    )
+    db.session.add(new_review)
+# Commit the changes
+    db.session.commit()
+
     print("Database seeded successfully!")
+

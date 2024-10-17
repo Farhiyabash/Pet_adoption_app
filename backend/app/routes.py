@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, abort
-from app.models import Pet, User, AdoptionRequest, Breed, PetType
+from app.models import Pet, User, AdoptionRequest, Breed, PetType,Review
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
@@ -156,3 +156,57 @@ def delete_pet_type(id):
     db.session.delete(pet_type)
     db.session.commit()
     return jsonify({'message': 'Pet type deleted successfully'}), 200
+
+# ---------- REVIEW ROUTES ----------
+@routes_app.route('/reviews', methods=['GET'])
+def get_reviews():
+    reviews = Review.query.all()
+    return jsonify([review.to_dict() for review in reviews]), 200
+
+@routes_app.route('/reviews/<int:id>', methods=['GET'])
+def get_review(id):
+    review = Review.query.get_or_404(id)
+    return jsonify(review.to_dict()), 200
+
+@routes_app.route('/reviews', methods=['POST'])
+def create_review():
+    data = request.get_json()
+    
+    # Validate required fields
+    if not data.get('pet_id') or not data.get('user_id') or not data.get('rating'):
+        return abort(400, description="Missing required fields (pet_id, user_id, rating)")
+    
+    # Validate rating value
+    if data['rating'] < 1 or data['rating'] > 5:
+        return abort(400, description="Rating must be between 1 and 5")
+    
+    new_review = Review(
+        pet_id=data['pet_id'],
+        user_id=data['user_id'],
+        rating=data['rating'],
+        comment=data.get('comment', '')
+    )
+    
+    db.session.add(new_review)
+    db.session.commit()
+    return jsonify(new_review.to_dict()), 201
+
+@routes_app.route('/reviews/<int:id>', methods=['PUT'])
+def update_review(id):
+    review = Review.query.get_or_404(id)
+    data = request.get_json()
+    
+    # Update fields
+    review.rating = data.get('rating', review.rating)
+    review.comment = data.get('comment', review.comment)
+    
+    db.session.commit()
+    return jsonify(review.to_dict()), 200
+
+@routes_app.route('/reviews/<int:id>', methods=['DELETE'])
+def delete_review(id):
+    review = Review.query.get_or_404(id)
+    db.session.delete(review)
+    db.session.commit()
+    return jsonify({'message': 'Review deleted successfully'}), 200
+

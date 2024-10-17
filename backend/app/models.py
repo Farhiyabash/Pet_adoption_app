@@ -78,3 +78,26 @@ class AdoptionRequest(db.Model):
             'user_id': self.user_id,
             'pet_id': self.pet_id
         }
+
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False, check_constraint='rating >= 1 AND rating <= 5')
+    comment = db.Column(db.Text, nullable=True)
+
+    # Relationships (optional)
+    pet = db.relationship('Pet', backref=db.backref('reviews', lazy=True))
+    user = db.relationship('User', backref=db.backref('reviews', lazy=True))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'pet_id': self.pet_id,
+            'user_id': self.user_id,
+            'rating': self.rating,
+            'comment': self.comment,
+        }

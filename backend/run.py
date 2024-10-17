@@ -2,6 +2,8 @@ from app import create_app, db
 from flask_migrate import Migrate
 import os
 
+
+
 # Initialize the Flask app using the factory pattern
 app = create_app()
 
