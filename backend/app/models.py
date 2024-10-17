@@ -10,7 +10,6 @@ class Pet(db.Model):
     pet_type_id = db.Column(db.Integer, db.ForeignKey('pet_types.id'), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    # Add a to_dict() method to convert the Pet object to a dictionary
     def to_dict(self):
         return {
             'id': self.id,
@@ -75,6 +74,28 @@ class AdoptionRequest(db.Model):
         return {
             'id': self.id,
             'message': self.message,
+            'user_id': self.user_id,
+            'pet_id': self.pet_id
+        }
+
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)  # Add a rating field (1-5 scale)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+
+    user = db.relationship('User', backref='reviews')  # Establish relationship with User
+    pet = db.relationship('Pet', backref='reviews')      # Establish relationship with Pet
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'rating': self.rating,
             'user_id': self.user_id,
             'pet_id': self.pet_id
         }

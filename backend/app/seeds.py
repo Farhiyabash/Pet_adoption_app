@@ -4,9 +4,8 @@ import os
 # Add the project root directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
 from app import create_app, db
-from app.models import User, Pet, Breed, PetType, AdoptionRequest
+from app.models import User, Pet, Breed, PetType, AdoptionRequest, Review  # Import the Review model
 from faker import Faker
 import random
 
@@ -78,6 +77,18 @@ with app.app_context():
             pet_id=random.choice(pets).id
         )
         db.session.add(adoption_request)
+
+    db.session.commit()
+
+    # Seed Reviews
+    for _ in range(15):  # Create 15 reviews
+        review = Review(
+            content=fake.text(max_nb_chars=200),
+            rating=random.randint(1, 5),  # Rating between 1 and 5
+            user_id=random.choice(users).id,
+            pet_id=random.choice(pets).id
+        )
+        db.session.add(review)
 
     db.session.commit()
 
