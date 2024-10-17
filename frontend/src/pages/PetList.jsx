@@ -4,7 +4,7 @@ const PetList = () => {
   const [pets, setPets] = useState([]);
 
   useEffect(() => {
-    fetch('http://172.30.130.227:5000/pets')
+    fetch('http://127.0.0.1:5000/pets')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

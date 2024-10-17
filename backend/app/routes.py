@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, abort
-from app.models import Pet, User, AdoptionRequest, Breed, PetType,Review
+from app.models import Pet, User, AdoptionRequest, Breed, PetType, Review, Reply  # Assuming Reply is a model for replies
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
@@ -20,8 +20,14 @@ def create_pet():
     data = request.get_json()
     if not data.get('name') or not data.get('age') or not data.get('pet_type_id') or not data.get('owner_id'):
         return abort(400, description="Missing required fields")
-    new_pet = Pet(name=data['name'], age=data['age'], description=data.get('description', ''),
-                  pet_type_id=data['pet_type_id'], owner_id=data['owner_id'])
+    
+    new_pet = Pet(
+        name=data['name'],
+        age=data['age'],
+        description=data.get('description', ''),
+        pet_type_id=data['pet_type_id'],
+        owner_id=data['owner_id']
+    )
     db.session.add(new_pet)
     db.session.commit()
     return jsonify(new_pet.to_dict()), 201
@@ -62,6 +68,7 @@ def create_user():
     data = request.get_json()
     if not data.get('name') or not data.get('email'):
         return abort(400, description="Name and email are required.")
+    
     new_user = User(name=data['name'], email=data['email'])
     db.session.add(new_user)
     db.session.commit()
@@ -100,6 +107,7 @@ def create_breed():
     data = request.get_json()
     if not data.get('name'):
         return abort(400, description="Breed name is required.")
+    
     new_breed = Breed(name=data['name'])
     db.session.add(new_breed)
     db.session.commit()
@@ -121,7 +129,7 @@ def delete_breed(id):
     return jsonify({'message': 'Breed deleted successfully'}), 200
 
 
-# ---------- PETTYPE ROUTES ----------
+# ---------- PET TYPE ROUTES ----------
 @routes_app.route('/pet-types', methods=['GET'])
 def get_pet_types():
     pet_types = PetType.query.all()
@@ -137,6 +145,7 @@ def create_pet_type():
     data = request.get_json()
     if not data.get('name'):
         return abort(400, description="Pet type name is required.")
+    
     new_pet_type = PetType(name=data['name'])
     db.session.add(new_pet_type)
     db.session.commit()
@@ -157,6 +166,7 @@ def delete_pet_type(id):
     db.session.commit()
     return jsonify({'message': 'Pet type deleted successfully'}), 200
 
+
 # ---------- REVIEW ROUTES ----------
 @routes_app.route('/reviews', methods=['GET'])
 def get_reviews():
@@ -171,10 +181,15 @@ def get_review(id):
 @routes_app.route('/reviews', methods=['POST'])
 def create_review():
     data = request.get_json()
-    if not data.get('content') or not data.get('rating') or not data.get('user_id') or not data.get('pet_id'):
+    if not data.get('content') or not data.get('user_id') or not data.get('pet_id'):
         return abort(400, description="Missing required fields")
-    new_review = Review(content=data['content'], rating=data['rating'], 
-                        user_id=data['user_id'], pet_id=data['pet_id'])
+    
+    new_review = Review(
+        content=data['content'],
+        rating=data.get('rating', None),  # Optional field
+        user_id=data['user_id'],
+        pet_id=data['pet_id']
+    )
     db.session.add(new_review)
     db.session.commit()
     return jsonify(new_review.to_dict()), 201
@@ -188,9 +203,46 @@ def update_review(id):
     db.session.commit()
     return jsonify(review.to_dict()), 200
 
+@routes_app.route('/reviews/<int:review_id>/like', methods=['PATCH'])
+def like_review(review_id):
+    review = Review.query.get_or_404(review_id)
+    review.likes += 1
+    db.session.commit()
+    return jsonify({'likes': review.likes}), 200
+
 @routes_app.route('/reviews/<int:id>', methods=['DELETE'])
 def delete_review(id):
     review = Review.query.get_or_404(id)
     db.session.delete(review)
     db.session.commit()
     return jsonify({'message': 'Review deleted successfully'}), 200
+
+
+# ---------- REPLY ROUTES ----------
+@routes_app.route('/reviews/<int:review_id>/replies', methods=['POST'])
+def create_reply(review_id):
+    data = request.get_json()
+    if not data.get('content') or not data.get('user_id'):
+        return abort(400, description="Missing required fields")
+    
+    new_reply = Reply(
+        content=data['content'],
+        user_id=data['user_id'],
+        review_id=review_id
+    )
+    db.session.add(new_reply)
+    db.session.commit()
+    return jsonify(new_reply.to_dict()), 201
+
+@routes_app.route('/reviews/<int:review_id>/replies', methods=['GET'])
+def get_replies(review_id):
+    replies = Reply.query.filter_by(review_id=review_id).all()
+    return jsonify([reply.to_dict() for reply in replies]), 200
+
+@routes_app.route('/replies/<int:id>', methods=['DELETE'])
+def delete_reply(id):
+    reply = Reply.query.get_or_404(id)
+    db.session.delete(reply)
+    db.session.commit()
+    return jsonify({'message': 'Reply deleted successfully'}), 200
+

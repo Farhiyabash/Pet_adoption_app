@@ -99,3 +99,25 @@ class Review(db.Model):
             'user_id': self.user_id,
             'pet_id': self.pet_id
         }
+
+
+# ---------- REPLY MODEL ----------
+class Reply(db.Model):
+    __tablename__ = 'replies'
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    review_id = db.Column(db.Integer, db.ForeignKey('reviews.id'), nullable=False)
+
+    user = db.relationship('User', backref='replies')  # Establish relationship with User
+    review = db.relationship('Review', backref='replies')  # Establish relationship with Review
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'user_id': self.user_id,
+            'review_id': self.review_id,
+            'user_name': self.user.name  # Assuming you have a name field in User
+        }

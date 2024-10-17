@@ -1,0 +1,258 @@
+.container {
+    max-width: 800px; /* Set a maximum width for the container */
+    margin: 0 auto; /* Center the container */
+  }
+  
+  .review {
+    background-color: #f8f9fa; /* Light background for reviews */
+    border: 1px solid #ced4da; /* Border color */
+  }
+  
+  .review-input {
+    height: 100px; /* Set a consistent height for the text area */
+    border: 1px solid #ced4da; /* Border style */
+    border-radius: 0.25rem; /* Rounded corners */
+  }
+  
+  .review-input:focus {
+    border-color: #007bff; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow effect on focus */
+  }
+  
+  .form-control {
+    width: 100%; /* Full width of the container */
+    max-width: 400px; /* Set a maximum width for the inputs */
+    margin: 0 auto; /* Center the inputs */
+  }
+  
+  .emoji-picker {
+    display: flex; /* Use flexbox for emoji buttons */
+    justify-content: center; /* Center the emoji buttons */
+    margin-top: 1rem; /* Spacing above emoji picker */
+  }
+  
+  .emoji-btn {
+    margin: 0 0.5rem; /* Spacing between emoji buttons */
+    font-size: 1.5rem; /* Adjust emoji size */
+  }
+  
+  .btn {
+    margin-right: 10px; /* Spacing between buttons */
+  }
+  .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  .review {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .review-input {
+    height: 100px;
+  }
+  .review {
+    position: relative;
+  }
+  
+  .replies {
+    margin-left: 20px; /* Indentation for replies */
+  }
+  
+  .reply {
+    margin-top: 5px; /* Spacing between replies */
+  }
+  
+  .emoji-picker {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .emoji-btn {
+    margin-right: 5px;
+    padding: 0.5rem;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .review-input {
+    flex-grow: 1;
+  }
+  
+  .emoji-picker {
+    display: flex;
+    align-items: center;
+  }
+  .emoji-container {
+    position: relative;
+  }
+  
+  .emoji-picker {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    z-index: 1000;
+  }
+  
+  .emoji-option {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .emoji-btn {
+    font-size: 24px;
+  }
+  .review-input {
+    height: 100px;
+    resize: none;
+  }
+  
+  .emoji-container {
+    position: relative;
+  }
+  
+  .emoji-picker {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 250px;
+  }
+  
+  .emoji-option {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .emoji-btn {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .review-input {
+    height: 100px;
+    resize: none;
+  }
+  
+  .emoji-container {
+    position: relative;
+  }
+  
+  .emoji-picker {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 250px;
+  }
+  
+  .emoji-option {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .emoji-btn {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .review-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .btn {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .btn-like {
+    /* Initial style for the like button */
+  }
+  
+  .btn-delete {
+    /* Initial style for the delete button */
+  }
+  
+  .btn:focus {
+    outline: none; /* Remove outline for focused buttons */
+  }
+  
+  /* Animation on click */
+  .btn:active {
+    transform: scale(0.95);
+  }
+  
+  /* Animation for the like button on click */
+  .btn-like.clicked {
+    animation: like-animation 0.4s forwards;
+  }
+  
+  @keyframes like-animation {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+    50% {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 1);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: none;
+    }
+  }
+  
+  /* Animation for the delete button on click */
+  .btn-delete.clicked {
+    animation: delete-animation 0.4s forwards;
+  }
+  
+  @keyframes delete-animation {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+      transform: translateX(-5px);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: none;
+    }
+  }
+  
