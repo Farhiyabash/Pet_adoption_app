@@ -1,6 +1,6 @@
 /* Full-page background styling */
-.login-container {
-    background-image: linear-gradient(to right, #43cea2, #185a9d); /* Gradient background */
+.signup-container {
+    background-image: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
     min-height: 100vh;
     padding: 20px;
     color: #fff;
@@ -35,14 +35,14 @@ form .form-control {
 }
 
 form .form-control:focus {
-    border-color: #185a9d;
+    border-color: #2575fc;
     box-shadow: none;
 }
 
 /* Button styling */
 form .btn-primary {
-    background-color: #43cea2;
-    border-color: #43cea2;
+    background-color: #6a11cb;
+    border-color: #6a11cb;
     font-size: 18px;
     font-weight: 600;
     padding: 12px;
@@ -51,6 +51,6 @@ form .btn-primary {
 }
 
 form .btn-primary:hover {
-    background-color: #185a9d;
-    border-color: #185a9d;
+    background-color: #2575fc;
+    border-color: #2575fc;
 }
