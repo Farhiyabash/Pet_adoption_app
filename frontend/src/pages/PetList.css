@@ -8,7 +8,7 @@
 
 .pet-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid layout */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns in a row */
   gap: 20px; /* Space between cards */
 }
 
@@ -16,9 +16,16 @@
   border: 1px solid #ddd; /* Add a border for better visibility */
   border-radius: 5px; /* Rounded corners */
   overflow: hidden; /* Ensure rounded corners are effective */
-  transition: background-color 0.3s;
-  height: 250px; /* Set a fixed height for uniformity */
+  transition: background-color 0.3s, transform 0.3s; /* Transition for hover effect */
   padding: 10px; /* Reduce padding for a more compact look */
+  height: auto; /* Let the height adjust based on content */
+  width: 300px; /* Set a fixed width for larger cards */
+}
+
+.pet-image {
+  width: 100%; /* Make image responsive */
+  height: 200px; /* Set a fixed height for images */
+  object-fit: cover; /* Maintain aspect ratio */
 }
 
 .card-body {
@@ -40,6 +47,11 @@ button {
 
 .pet-card.adopted {
   background-color: #d4edda; /* Light green for adopted pets */
+}
+
+/* Add hover effect to scale the card */
+.pet-card:hover {
+  transform: scale(1.05); /* Scale up on hover */
 }
 
 .adoption-form {

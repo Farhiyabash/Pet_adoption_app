@@ -22,23 +22,21 @@ const Signup = ({ onSignup }) => {
       gender: Yup.string().required('Gender is required'),
     }),
     onSubmit: async (values) => {
-      
       try {
         const res = await fetch(
-          ${import.meta.env.REACT_API_URL}/users,
+          `${import.meta.env.REACT_APP_API_URL}/users`, // Fixed variable name
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(values),
-           
           }
         );
 
         // Check if the response is okay (status code 200-299)
         if (!res.ok) {
-          throw new Error(Error: ${res.statusText});
+          throw new Error(`Error: ${res.statusText}`); // Fixed error message syntax
         }
 
         const data = await res.json();
