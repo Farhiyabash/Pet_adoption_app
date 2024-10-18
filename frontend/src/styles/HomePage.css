@@ -1,0 +1,13 @@
+/* src/styles/HomePage.css */
+.home-page {
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: #e9ecef;
+    border-bottom: 1px solid #dee2e6;
+}
+
+footer {
+    background-color: #e9ecef;
+}

@@ -1,0 +1,41 @@
+/* src/styles/App.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light background color */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333; /* Darker text color for headings */
+}
+
+a {
+    text-decoration: none; /* Remove underline from links */
+}
+
+.container {
+    max-width: 1200px; /* Limit the maximum width of the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Add padding around the container */
+}
+
+footer {
+    background-color: #343a40; /* Dark background for footer */
+    color: white; /* White text color for footer */
+    padding: 10px 0; /* Padding for footer */
+    position: relative; /* Position footer */
+    bottom: 0;
+    width: 100%;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important; /* Override Bootstrap light background */
+}
+
+.text-danger {
+    color: #dc3545; /* Bootstrap danger color */
+}
+
+/* Add other global styles as needed */

@@ -1,0 +1,10 @@
+/* src/styles/PetList.css */
+.pet-list {
+    margin: 20px 0;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

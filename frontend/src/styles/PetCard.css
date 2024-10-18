@@ -1,0 +1,36 @@
+/* src/styles/PetCard.css */
+.pet-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.pet-card:hover {
+    transform: translateY(-5px);
+}
+
+.pet-card-img {
+    width: 100%;
+    height: auto;
+}
+
+.pet-card-body {
+    padding: 15px;
+}
+
+.pet-card-title {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.pet-card-description {
+    font-size: 0.9rem;
+    margin: 10px 0;
+}
+
+.pet-card-breed,
+.pet-card-age {
+    font-size: 0.8rem;
+}
