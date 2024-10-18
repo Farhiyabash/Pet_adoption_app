@@ -1,23 +1,25 @@
 from flask import Flask
-from .extensions import db
+from flask_migrate import Migrate
+from .extensions import db, jwt, cors
 from .models import Pet, User, AdoptionRequest, Breed, PetType
 from .routes import routes_app
-from flask_migrate import Migrate
-from flask_cors import CORS
+from .config import Config
 
 def create_app():
     app = Flask(__name__)
 
-    # Enable CORS for specific origins without duplicates
-    CORS(app, resources={r"*": {"origins": ["http://localhost:3000"]}})
+    # Load configuration from the Config class
+    app.config.from_object(Config)
 
-    # Configure the app
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pets.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Initialize CORS for the application with specified origins
+    cors.init_app(app, resources={r"*": {"origins": Config.CORS_ORIGINS}})
 
-    # Initialize the database and migrations
+    # Initialize database and migration support
     db.init_app(app)
-    Migrate(app, db)
+    migrate = Migrate(app, db)
+
+    # Initialize JWT for the application
+    jwt.init_app(app)
 
     # Register blueprints
     app.register_blueprint(routes_app)

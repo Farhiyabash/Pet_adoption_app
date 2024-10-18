@@ -1,13 +1,13 @@
 import sys
 import os
+from faker import Faker
+import random
 
 # Add the project root directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import create_app, db
 from app.models import User, Pet, Breed, PetType, AdoptionRequest
-from faker import Faker
-import random
 
 # Initialize Faker
 fake = Faker()
@@ -47,12 +47,12 @@ with app.app_context():
     for _ in range(10):  # Create 10 users
         user = User(
             name=fake.name(),
-            email=fake.email(),
-            password=fake.password()  # Random password for each user
+            email=fake.unique.email(),  # Ensure unique emails
         )
+        user.set_password(fake.password())  # Set password using the method defined in the User model
         db.session.add(user)
         users.append(user)
-    
+
     db.session.commit()
 
     # Seed Pets
@@ -73,7 +73,7 @@ with app.app_context():
     # Seed Adoption Requests
     for _ in range(30):  # Create 30 adoption requests
         adoption_request = AdoptionRequest(
-            message=fake.text(max_nb_chars=200),
+            message=fake.text(max_nb_chars=200),  # Ensure this matches your model
             user_id=random.choice(users).id,
             pet_id=random.choice(pets).id
         )
