@@ -1,28 +1,36 @@
 import React, { useState } from 'react';
-import { loginUser } from '../services/userService';
+import { registerUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const SignUpPage = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const credentials = { email, password };
+        const userData = { name, email, password };
         try {
-            const data = await loginUser(credentials);
-            localStorage.setItem('token', data.accessToken); // Store the token for later use
-            navigate('/profile'); // Redirect to the profile page
+            await registerUser(userData);
+            // Redirect to Login page after successful registration
+            navigate('/login');
         } catch (error) {
-            console.error('Login failed:', error);
-            alert('Login failed. Please check your credentials.');
+            console.error('Registration failed:', error);
+            alert('Registration failed. Please try again.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            <h2>Sign Up</h2>
+            <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+            />
             <input
                 type="email"
                 placeholder="Email"
@@ -37,9 +45,9 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
-            <button type="submit">Login</button>
+            <button type="submit">Sign Up</button>
         </form>
     );
 };
 
-export default LoginPage;
+export default SignUpPage;

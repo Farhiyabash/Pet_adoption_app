@@ -1,4 +1,3 @@
-// src/services/petService.js
 import axios from 'axios';
 
 // Function to fetch pets data from the backend

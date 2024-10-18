@@ -1,10 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Use Routes instead of Switch
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './redux/store'; // Import the Redux store
-import Navigation from './components/Navigation'; // Import the Navigation component
-import HomePage from './pages/HomePage'; // Import the HomePage component
-import './styles/App.css'; // Global styles
+import store from './redux/store';
+import Navigation from './components/Navigation';
+import HomePage from './pages/HomePage';
+import AdoptionRequestsPage from './pages/AdoptionRequestsPage';
+import SignUpPage from './pages/SignUpPage';
+import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage'; // Import ProfilePage
+import './styles/App.css';
 
 const App = () => {
     return (
@@ -12,8 +16,12 @@ const App = () => {
             <Router>
                 <Navigation />
                 <div className="container mt-4">
-                    <Routes> {/* Replace Switch with Routes */}
-                        <Route path="/" element={<HomePage />} /> {/* Update Route syntax */}
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/adopt" element={<AdoptionRequestsPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/profile" element={<ProfilePage />} /> {/* New route for Profile */}
                         {/* Additional routes can be added here */}
                     </Routes>
                 </div>
@@ -23,3 +31,4 @@ const App = () => {
 };
 
 export default App;
+

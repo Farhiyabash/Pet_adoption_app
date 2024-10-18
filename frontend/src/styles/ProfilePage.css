@@ -1,0 +1,18 @@
+/* src/pages/ProfilePage.css */
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card {
+    border: 1px solid #007bff; /* Bootstrap primary color */
+    border-radius: 0.5rem;
+}
+
+.card-title {
+    color: #007bff; /* Bootstrap primary color */
+}
+
+.card-text {
+    font-size: 1.2rem;
+}
