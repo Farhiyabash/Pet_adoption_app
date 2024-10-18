@@ -13,11 +13,20 @@ const PetList = () => {
   const [adoptedPetId, setAdoptedPetId] = useState(null);
 
   useEffect(() => {
+    // Fetch initial pet data
     fetch('http://localhost:5000/pets')
       .then(response => response.json())
-      .then(data => setPets(data))
+      .then(data => {
+        // Add an imageUrl property to each pet
+        const petsWithImages = data.map(pet => ({
+          ...pet,
+          imageUrl: pet.imageUrl || '', // Initialize with empty or existing URL
+        }));
+        setPets(petsWithImages);
+      })
       .catch(error => console.error('Fetch error:', error));
 
+    // Fetch pet types
     fetch('http://localhost:5000/pet-types')
       .then(response => response.json())
       .then(data => setPetTypes(data))
@@ -38,7 +47,7 @@ const PetList = () => {
   };
 
   const handleAdopt = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     fetch(`http://localhost:5000/pets`, {
       method: 'POST',
       headers: {
@@ -61,14 +70,18 @@ const PetList = () => {
         setSelectedBreed('');
         setDescription('');
         setAdoptedPetId(null);
-
-        // Show alert after successful adoption
         alert('Submission request has been made successfully!');
       })
       .catch(error => {
         console.error('Fetch error:', error);
         alert('There was an error processing your request.');
       });
+  };
+
+  const updateImageUrl = (id, url) => {
+    setPets(pets.map(pet => 
+      pet.id === id ? { ...pet, imageUrl: url } : pet
+    ));
   };
 
   return (
@@ -82,8 +95,15 @@ const PetList = () => {
       <div className="pet-cards mt-4">
         {pets.map(pet => (
           <div key={pet.id} className={`card pet-card ${pet.adopted ? 'adopted' : ''}`}>
+            <img src={pet.imageUrl || 'https://i.pinimg.com/564x/99/67/4b/99674bab812772ffa95215988175d776.jpg'} alt={pet.name} className="pet-image" />
             <div className="card-body">
               <h5 className="card-title">{pet.name}</h5>
+              <input 
+                type="text" 
+                placeholder="Update Image URL" 
+                onChange={(e) => updateImageUrl(pet.id, e.target.value)} 
+                className="form-control" 
+              />
               <p className="card-text">{pet.description}</p>
               <button 
                 className="btn btn-success" 
@@ -103,7 +123,7 @@ const PetList = () => {
           <div className="form-group">
             <label htmlFor="petType">Select Pet Type:</label>
             <select id="petType" className="form-control" value={selectedType} onChange={handleTypeChange}>
-              <option value="">-- Choose a Type --</option> {/* Correctly closed */}
+              <option value="">-- Choose a Type --</option>
               {petTypes.map(type => (
                 <option key={type.id} value={type.id}>{type.name}</option>
               ))}
