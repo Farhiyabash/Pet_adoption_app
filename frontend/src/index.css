@@ -13,7 +13,7 @@ body {
 
 .carousel {
   position: relative;
-  height: 100vh; /* Fill the viewport height */
+  height: 100vh; 
   overflow: hidden;
 }
 
