@@ -4,7 +4,6 @@ import os
 # Add the project root directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
 from app import create_app, db
 from app.models import User, Pet, Breed, PetType, AdoptionRequest
 from faker import Faker
@@ -49,6 +48,7 @@ with app.app_context():
         user = User(
             name=fake.name(),
             email=fake.email(),
+            password=fake.password()  # Random password for each user
         )
         db.session.add(user)
         users.append(user)

@@ -14,7 +14,6 @@ const Reviews = () => {
   const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const petId = 1; 
 
-  // Array of emoji options
   const emojiOptions = ['😊', '😍', '🔥', '❤️', '😢', '😡', '😂', '✨', '👍', '🎉'];
 
   useEffect(() => {
@@ -32,13 +31,7 @@ const Reviews = () => {
         const reviewsData = await reviewsResponse.json();
         const usersData = await usersResponse.json();
 
-        const initializedReviews = reviewsData.map((review) => ({
-          ...review,
-          likes: review.likes || 0,
-          liked: false,
-        }));
-
-        setCustomerReviews(initializedReviews);
+        setCustomerReviews(reviewsData);
         setUserProfiles(usersData);
       } catch (error) {
         console.error('Error fetching reviews or users:', error);
@@ -103,7 +96,7 @@ const Reviews = () => {
         const newLikedStatus = !review.liked;
         return {
           ...review,
-          likes: newLikedStatus ? (review.likes || 0) + 1 : (review.likes || 0) - 1,
+          likes: newLikedStatus ? review.likes + 1 : review.likes - 1,
           liked: newLikedStatus,
         };
       }
@@ -158,7 +151,7 @@ const Reviews = () => {
   }
 
   return (
-    <div className="container mt-4" >
+    <div className="container mt-4">
       <h1 className="text-center mb-4">Customer Reviews</h1>
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <form onSubmit={handleReviewSubmission} className="mb-4 border p-3 rounded shadow-sm">
@@ -203,11 +196,11 @@ const Reviews = () => {
             min="1"
             max="5"
             value={reviewRating}
-            onChange={(e) => setReviewRating(e.target.value)}
+            onChange={(e) => setReviewRating(Number(e.target.value))}
           />
         </div>
         <button type="submit" className="btn btn-success">Submit</button>
-        </form>
+      </form>
       <div className="reviews-list mt-4">
         <h2>User Reviews</h2>
         {customerReviews.length === 0 ? (

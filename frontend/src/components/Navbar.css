@@ -37,3 +37,7 @@
 .navbar-nav.ml-auto {
   margin-left: auto;
 }
+
+.icon {
+  margin-right: 5px; /* Add space between icon and text */
+}

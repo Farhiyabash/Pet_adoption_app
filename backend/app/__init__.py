@@ -1,15 +1,15 @@
 from flask import Flask
-from .extensions import db  # Import db from the new extensions module
+from .extensions import db
 from .models import Pet, User, AdoptionRequest, Breed, PetType
 from .routes import routes_app
 from flask_migrate import Migrate
 from flask_cors import CORS
 
 def create_app():
-    app = Flask(__name__) 
+    app = Flask(__name__)
 
-    # Enable CORS for all routes
-    CORS(app)
+    # Enable CORS for specific origins without duplicates
+    CORS(app, resources={r"*": {"origins": ["http://localhost:3000"]}})
 
     # Configure the app
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pets.db'

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css';
+import { FaHome, FaPaw, FaStar, FaSignInAlt } from 'react-icons/fa'; // Importing icons from react-icons
+import './Navbar.css';  // Import the new CSS file for the Navbar
 
 const Navbar = () => {
   return (
@@ -13,19 +14,24 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Home</Link>
+              <Link className="nav-link" to="/">
+                <FaHome className="icon" /> Home
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link>
+              <Link className="nav-link" to="/pets">
+                <FaPaw className="icon" /> Pets
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">Sign Up</Link>
+              <Link className="nav-link" to="/reviews">
+                <FaStar className="icon" /> Reviews
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/pets">Pets</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/reviews">Reviews</Link>
+              <Link className="btn btn-outline-primary" to="/login" style={{ marginLeft: '15px' }}>
+                <FaSignInAlt className="icon" /> Login
+              </Link>
             </li>
           </ul>
         </div>
