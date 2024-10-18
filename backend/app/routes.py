@@ -1,8 +1,32 @@
 from flask import Blueprint, jsonify, request, abort
+from flask_cors import cross_origin
+from app.models import Pet, User, AdoptionRequest, Breed, PetType
 from app.models import Pet, User, AdoptionRequest, Breed, PetType, Review, Reply  # Assuming Reply is a model for replies
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
+
+@routes_app.after_request
+@cross_origin()
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+# ---------- LOGIN ROUTE ----------
+@routes_app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return abort(400, description="Email and password are required.")
+
+    user = User.query.filter_by(email=email).first()
+    if user and user.verify_password(password):
+        return jsonify({'email': user.email, 'id': user.id, 'name': user.name}), 200
+    else:
+        return abort(401, description="Invalid email or password.")
 
 # ---------- PET ROUTES ----------
 @routes_app.route('/pets', methods=['GET'])
@@ -51,7 +75,6 @@ def delete_pet(id):
     db.session.commit()
     return jsonify({'message': 'Pet deleted successfully'}), 200
 
-
 # ---------- USER ROUTES ----------
 @routes_app.route('/users', methods=['GET'])
 def get_users():
@@ -66,6 +89,9 @@ def get_user(id):
 @routes_app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
+    if not data.get('name') or not data.get('email') or not data.get('password'):
+        return abort(400, description="Name, email, and password are required.")
+    new_user = User(name=data['name'], email=data['email'], password=data['password'])
     if not data.get('name') or not data.get('email'):
         return abort(400, description="Name and email are required.")
     
@@ -80,6 +106,7 @@ def update_user(id):
     data = request.get_json()
     user.name = data.get('name', user.name)
     user.email = data.get('email', user.email)
+    # Note: You might want to add password update logic here
     db.session.commit()
     return jsonify(user.to_dict()), 200
 
@@ -89,7 +116,6 @@ def delete_user(id):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message': 'User deleted successfully'}), 200
-
 
 # ---------- BREED ROUTES ----------
 @routes_app.route('/breeds', methods=['GET'])
@@ -128,6 +154,7 @@ def delete_breed(id):
     db.session.commit()
     return jsonify({'message': 'Breed deleted successfully'}), 200
 
+# ---------- PETTYPE ROUTES ----------
 
 # ---------- PET TYPE ROUTES ----------
 @routes_app.route('/pet-types', methods=['GET'])

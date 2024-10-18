@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../index.css';
 
 const images = [
@@ -10,10 +11,17 @@ const images = [
   'https://cdn.pixabay.com/photo/2021/10/19/10/56/cat-6723256_1280.jpg'
 ];
 
-const Home = () => {
+const Home = ({ isAuthenticated }) => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCards, setShowCards] = useState(false);
   const [currentCard, setCurrentCard] = useState('about');
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login'); // Redirect to login if not authenticated
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     const interval = setInterval(() => {
