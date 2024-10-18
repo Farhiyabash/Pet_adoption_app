@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+.container {
+  font-family: 'Poppins', sans-serif;
+  max-width: 1200px; /* Limit the max width for better alignment */
+  margin: auto;
+}
+
+.pet-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid layout */
+  gap: 20px; /* Space between cards */
+}
+
+.pet-card {
+  border: 1px solid #ddd; /* Add a border for better visibility */
+  border-radius: 5px; /* Rounded corners */
+  overflow: hidden; /* Ensure rounded corners are effective */
+  transition: background-color 0.3s;
+  height: 250px; /* Set a fixed height for uniformity */
+  padding: 10px; /* Reduce padding for a more compact look */
+}
+
+.card-body {
+  padding: 10px; /* Reduce padding for a more compact look */
+}
+
+.card-title {
+  font-size: 1.1em; /* Slightly smaller title font */
+}
+
+.card-text {
+  font-size: 0.9em; /* Smaller description font */
+}
+
+button {
+  margin-top: 10px;
+  font-size: 0.9em; /* Smaller button font */
+}
+
+.pet-card.adopted {
+  background-color: #d4edda; /* Light green for adopted pets */
+}
+
+.adoption-form {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
