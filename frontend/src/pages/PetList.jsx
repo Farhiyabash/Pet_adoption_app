@@ -39,7 +39,7 @@ const PetList = () => {
 
   const handleAdopt = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    fetch(`http://localhost:5000/peta`, {
+    fetch(`http://localhost:5000/pets`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,8 +61,14 @@ const PetList = () => {
         setSelectedBreed('');
         setDescription('');
         setAdoptedPetId(null);
+
+        // Show alert after successful adoption
+        alert('Submission request has been made successfully!');
       })
-      .catch(error => console.error('Fetch error:', error));
+      .catch(error => {
+        console.error('Fetch error:', error);
+        alert('There was an error processing your request.');
+      });
   };
 
   return (
@@ -97,7 +103,7 @@ const PetList = () => {
           <div className="form-group">
             <label htmlFor="petType">Select Pet Type:</label>
             <select id="petType" className="form-control" value={selectedType} onChange={handleTypeChange}>
-              <option value="">-- Choose a Type --</option>
+              <option value="">-- Choose a Type --</option> {/* Correctly closed */}
               {petTypes.map(type => (
                 <option key={type.id} value={type.id}>{type.name}</option>
               ))}
