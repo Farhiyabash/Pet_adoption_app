@@ -1,7 +1,10 @@
 from flask import Blueprint, jsonify, request, abort
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import (
+    create_access_token, create_refresh_token, jwt_required,
+    get_jwt_identity, set_access_cookies, unset_jwt_cookies
+)
 from flask_cors import cross_origin
-from app.models import Pet, User, Breed, PetType, Review, Reply
+from app.models import User, Pet, Breed, PetType, Review, Reply
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
@@ -27,6 +30,7 @@ def create_user():
     new_user.set_password(data['password'])  # Hash the password
     db.session.add(new_user)
     db.session.commit()
+
     return jsonify(new_user.to_dict()), 201
 
 @routes_app.route('/login', methods=['POST'])
@@ -41,9 +45,29 @@ def login():
     user = User.query.filter_by(email=email).first()
     if user and user.verify_password(password):
         access_token = create_access_token(identity={'id': user.id, 'email': user.email})
-        return jsonify({'access_token': access_token, 'name': user.name}), 200
+        refresh_token = create_refresh_token(identity={'id': user.id, 'email': user.email})
+
+        response = jsonify({'access_token': access_token, 'refresh_token': refresh_token, 'name': user.name})
+        set_access_cookies(response, access_token)
+        return response, 200
     else:
         return abort(401, description="Invalid email or password.")
+
+@routes_app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
+    response = jsonify({'access_token': access_token})
+    set_access_cookies(response, access_token)
+    return response, 200
+
+@routes_app.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    response = jsonify({"message": "Logout successful"})
+    unset_jwt_cookies(response)
+    return response, 200
 
 @routes_app.route('/check-email', methods=['GET'])
 def check_email():
@@ -53,16 +77,13 @@ def check_email():
         return abort(400, description="Email is required.")
 
     existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        return jsonify({'available': False}), 200  # Email is already registered
-    else:
-        return jsonify({'available': True}), 200  # Email is available
+    return jsonify({'available': not existing_user is not None}), 200
 
 @routes_app.route('/users/profile', methods=['GET'])
 @jwt_required()
 def get_user_profile():
-    current_user = get_jwt_identity()  
-    user = User.query.get_or_404(current_user['id'])  
+    current_user = get_jwt_identity()
+    user = User.query.get_or_404(current_user['id'])
     return jsonify({
         'id': user.id,
         'name': user.name,
@@ -132,8 +153,13 @@ def update_pet(id):
 def delete_pet(id):
     pet = Pet.query.get_or_404(id)
     db.session.delete(pet)
-    db.session.commit()
-    return jsonify({'message': 'Pet deleted successfully'}), 200
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Pet deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()  # Rollback the session in case of an error
+        return jsonify({'error': str(e)}), 400
+
 
 # ---------- BREED ROUTES ----------
 @routes_app.route('/breeds', methods=['GET'])
@@ -228,14 +254,39 @@ def delete_review(id):
 @jwt_required()
 def create_reply():
     data = request.get_json()
-    if not data.get('content') or not data.get('user_id') or not data.get('review_id'):
+    if not data.get('content') or not data.get('review_id') or not data.get('user_id'):
         return abort(400, description="Missing required fields")
     
     new_reply = Reply(
         content=data['content'],
-        user_id=data['user_id'],
-        review_id=data['review_id']
+        review_id=data['review_id'],
+        user_id=data['user_id']
     )
     db.session.add(new_reply)
     db.session.commit()
     return jsonify(new_reply.to_dict()), 201
+
+@routes_app.route('/replies/<int:reply_id>', methods=['GET'])
+@jwt_required()
+def get_reply(reply_id):
+    reply = Reply.query.get_or_404(reply_id)
+    return jsonify(reply.to_dict()), 200
+
+@routes_app.route('/replies/<int:reply_id>', methods=['PUT'])
+@jwt_required()
+def update_reply(reply_id):
+    reply = Reply.query.get_or_404(reply_id)
+    data = request.get_json()
+    
+    reply.content = data.get('content', reply.content)
+    
+    db.session.commit()
+    return jsonify(reply.to_dict()), 200
+
+@routes_app.route('/replies/<int:reply_id>', methods=['DELETE'])
+@jwt_required()
+def delete_reply(reply_id):
+    reply = Reply.query.get_or_404(reply_id)
+    db.session.delete(reply)
+    db.session.commit()
+    return jsonify({'message': 'Reply deleted successfully'}), 200
