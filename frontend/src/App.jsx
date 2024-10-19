@@ -1,30 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import PetList from './pages/PetList';
-import Reviews from './pages/Reviews';
-import Navbar from './components/Navbar';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // Ensure you're using the correct Router
+import Navbar from './components/Navbar'; // Adjust import paths as needed
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
+import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/pets" element={<PetList />} />
-        <Route path="/reviews" element={<Reviews />} />
-      </Routes>
-      <footer className="bg-dark text-white p-3 mt-5">
-        <div className="container">
-          <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
-        </div>
-      </footer>
-    </Router>
-  );
+    return (
+        <Router>
+            <Navbar />
+            <Routes>
+                {/* Define your routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;
