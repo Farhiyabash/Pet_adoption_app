@@ -1,45 +1,57 @@
 import React, { useState } from 'react';
-import { loginUser } from '../services/userService';
+import { registerUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
-import './LoginPage.css'; // Import custom CSS
+import './SignUpPage.css'; // Import custom CSS
 
-const LoginPage = () => {
+const SignUpPage = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState('');
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
+    const [success, setSuccess] = useState(''); // Success message
+    const [error, setError] = useState(''); // Error message
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const credentials = { email, password };
-        setLoading(true);
+        const userData = { name, email, password };
+        setLoading(true); // Start loading
 
         try {
-            const data = await loginUser(credentials);
-            localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
-            setSuccess('Successfully logged in!');
-            setError('');
+            await registerUser(userData);
+            setSuccess('User successfully registered!'); // Set success message
+            setError(''); // Clear any previous error message
             
+            // Show loading spinner for 2 seconds before redirecting
             setTimeout(() => {
-                navigate('/profile'); // Redirect to the profile page after 2 seconds
-            }, 2000);
+                navigate('/login'); // Redirect to login page
+            }, 2000); // Adjust the time as needed (2000 ms = 2 seconds)
         } catch (error) {
-            console.error('Login failed:', error);
-            setError('Login failed. Please check your credentials.');
-            setSuccess('');
+            console.error('Registration failed:', error);
+            setError('Registration failed. Please try again.'); // Set error message
+            setSuccess(''); // Clear any previous success message
         } finally {
-            setLoading(false);
+            setLoading(false); // Stop loading
         }
     };
 
     return (
-        <div className="login-container d-flex justify-content-center align-items-center vh-100">
+        <div className="signup-container d-flex justify-content-center align-items-center vh-100">
             <div className="card shadow p-4">
-                <h2 className="text-center mb-4">Login to Your Account</h2>
+                <h2 className="text-center mb-4">Create Your Account</h2>
                 <form onSubmit={handleSubmit}>
+                    <div className="form-group mb-3">
+                        <label htmlFor="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            className="form-control"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
                     <div className="form-group mb-3">
                         <label htmlFor="email">Email</label>
                         <input
@@ -58,7 +70,7 @@ const LoginPage = () => {
                             type="password"
                             id="password"
                             className="form-control"
-                            placeholder="Enter your password"
+                            placeholder="Create a strong password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -68,7 +80,7 @@ const LoginPage = () => {
                         {loading ? (
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         ) : (
-                            'Login'
+                            'Sign Up'
                         )}
                     </button>
                 </form>
@@ -79,4 +91,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default SignUpPage;

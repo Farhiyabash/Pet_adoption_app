@@ -1,44 +1,111 @@
-// src/pages/AdoptionsPage.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchAdoptions } from '../api'; // After moving
-import Loader from '../components/Loader'; // Adjust path to Loader
-import AdoptionCard from '../components/AdoptionCard'; // Adjust path to AdoptionCard
+import {
+    getAdoptionRequests,
+    createAdoptionRequest,
+    deleteAdoptionRequest
+} from '../api'; // Adjust the path according to your project structure
+import './AdoptionsPage.css'; // Create a CSS file for styles if needed
 
 const AdoptionsPage = () => {
-    const [adoptions, setAdoptions] = useState([]);
+    const [adoptionRequests, setAdoptionRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [newRequest, setNewRequest] = useState({ userId: '', petId: '', message: '' });
 
+    // Fetch adoption requests on component mount
     useEffect(() => {
-        const loadAdoptions = async () => {
+        const fetchAdoptionRequests = async () => {
             try {
-                const response = await fetchAdoptions(); // Adjust response structure as necessary
-                setAdoptions(response.data); // Assuming response has a data property
-            } catch (error) {
-                setError('Failed to load adoption requests. Please try again later.');
+                const data = await getAdoptionRequests();
+                setAdoptionRequests(data);
+            } catch (err) {
+                setError(err);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadAdoptions();
+        fetchAdoptionRequests();
     }, []);
 
+    // Handle input changes for the new request form
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewRequest((prev) => ({ ...prev, [name]: value }));
+    };
+
+    // Create a new adoption request
+    const handleCreateRequest = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await createAdoptionRequest(newRequest.userId, newRequest.petId, newRequest.message);
+            setAdoptionRequests((prev) => [...prev, response]);
+            setNewRequest({ userId: '', petId: '', message: '' }); // Reset form
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Delete an adoption request
+    const handleDeleteRequest = async (id) => {
+        setLoading(true);
+        try {
+            await deleteAdoptionRequest(id);
+            setAdoptionRequests((prev) => prev.filter((request) => request.id !== id));
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Render loading, error, or the adoption requests
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
     return (
-        <div className="container mt-5">
-            <h2 className="text-center">Your Adoption Requests</h2>
-            {loading && <Loader />}
-            {error && <div className="alert alert-danger">{error}</div>}
-            {!loading && !error && adoptions.length === 0 && (
-                <div className="alert alert-info text-center">No adoption requests found.</div>
-            )}
-            <div className="row">
-                {!loading && adoptions.map(adoption => (
-                    <div className="col-md-4 mb-4" key={adoption.id}>
-                        <AdoptionCard adoption={adoption} /> {/* Ensure AdoptionCard accepts the correct props */}
-                    </div>
+        <div className="adoptions-page">
+            <h1>Adoption Requests</h1>
+            <form onSubmit={handleCreateRequest}>
+                <input
+                    type="text"
+                    name="userId"
+                    placeholder="User ID"
+                    value={newRequest.userId}
+                    onChange={handleInputChange}
+                    required
+                />
+                <input
+                    type="text"
+                    name="petId"
+                    placeholder="Pet ID"
+                    value={newRequest.petId}
+                    onChange={handleInputChange}
+                    required
+                />
+                <textarea
+                    name="message"
+                    placeholder="Adoption Message"
+                    value={newRequest.message}
+                    onChange={handleInputChange}
+                    required
+                ></textarea>
+                <button type="submit">Create Adoption Request</button>
+            </form>
+            <ul>
+                {adoptionRequests.map((request) => (
+                    <li key={request.id}>
+                        <p>
+                            <strong>User ID:</strong> {request.user_id} | <strong>Pet ID:</strong> {request.pet_id}
+                        </p>
+                        <p>{request.message}</p>
+                        <button onClick={() => handleDeleteRequest(request.id)}>Delete Request</button>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
     );
 };

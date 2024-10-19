@@ -1,0 +1,26 @@
+.pet-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 250px;
+    text-align: left;
+}
+
+.pet-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.adopt-button {
+    background-color: #28a745; /* Green */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.adopt-button:hover {
+    background-color: #218838; /* Darker green */
+}

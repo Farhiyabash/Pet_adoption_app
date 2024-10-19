@@ -1,11 +1,22 @@
-// src/components/HomeNavbar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { logout } from '../services/api'; // Adjust path if it's incorrect
+import { Link, useNavigate } from 'react-router-dom';
+import { logoutUser } from '../services/api'; // Adjust path if necessary
 import { Navbar as BootstrapNavbar, Nav, Container, Form, Button } from 'react-bootstrap';
-// import LogoutButton from './LogoutButton'; // Adjust the path if necessary
 
 const HomeNavbar = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     return (
         <BootstrapNavbar bg="light" expand="lg">
             <Container>
@@ -33,10 +44,7 @@ const HomeNavbar = () => {
                         <Nav.Link as={Link} to="/adoptions">Adoptions</Nav.Link>
                         <Nav.Link as={Link} to="/reviews">Reviews</Nav.Link>
                         <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
-                        <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
-                        <Nav.Link as={Link} to="/profile">
-                            <i className="fas fa-user-circle" style={{ fontSize: '24px' }}></i>
-                        </Nav.Link>
+                        <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                     </Nav>
                 </BootstrapNavbar.Collapse>
             </Container>

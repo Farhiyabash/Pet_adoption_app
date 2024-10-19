@@ -1,44 +1,61 @@
-// src/components/FavoritesPage.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchFavorites } from '../api'; // Adjust the path as necessary
-import PetCard from '../components/PetCard'; // Adjust the path as necessary
-import Loader from '../components/Loader'; // Adjust the path as necessary
+import { getFavorites, deleteFavorite } from '../api'; // Adjust the path as necessary
+import { useSelector } from 'react-redux'; // Assuming you're using Redux for state management
+import { toast } from 'react-toastify'; // For notifications (optional)
 
 const FavoritesPage = () => {
     const [favorites, setFavorites] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    // If you need userId later, keep it; otherwise, you can remove this line
+    const userId = useSelector((state) => state.user.id); // Assuming you're storing user info in Redux
 
     useEffect(() => {
-        const loadFavorites = async () => {
+        const fetchFavorites = async () => {
             try {
-                const response = await fetchFavorites();
-                setFavorites(response.data); // Adjust based on your response structure
+                const response = await getFavorites(userId); // Pass userId if necessary
+                setFavorites(response); // Assuming response is an array of favorite pets
             } catch (error) {
-                setError('Failed to load favorites. Please try again later.');
-            } finally {
-                setLoading(false);
+                console.error('Error fetching favorites:', error);
+                toast.error('Failed to fetch favorites'); // Optional notification for error
             }
         };
 
-        loadFavorites();
-    }, []);
+        fetchFavorites();
+    }, [userId]); // Adding userId as a dependency if you need it to fetch favorites
+
+    const handleDeleteFavorite = async (favoriteId) => {
+        try {
+            await deleteFavorite(favoriteId);
+            setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== favoriteId));
+            toast.success('Favorite removed successfully'); // Optional notification for success
+        } catch (error) {
+            console.error('Error deleting favorite:', error);
+            toast.error('Failed to remove favorite'); // Optional notification for error
+        }
+    };
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center">Your Favorite Pets</h2>
-            {loading && <Loader />}
-            {error && <div className="alert alert-danger">{error}</div>}
-            {!loading && !error && favorites.length === 0 && (
-                <div className="alert alert-info text-center">No favorites found.</div>
+            <h2>Your Favorite Pets</h2>
+            {favorites.length === 0 ? (
+                <p>You have no favorite pets yet.</p>
+            ) : (
+                <ul className="list-group">
+                    {favorites.map((favorite) => (
+                        <li key={favorite.id} className="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{favorite.pet.name}</strong> {/* Adjust according to your data structure */}
+                                <p>{favorite.pet.description}</p> {/* Adjust according to your data structure */}
+                            </div>
+                            <button
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleDeleteFavorite(favorite.id)}
+                            >
+                                Remove
+                            </button>
+                        </li>
+                    ))}
+                </ul>
             )}
-            <div className="row">
-                {!loading && favorites.map(pet => (
-                    <div className="col-md-4 mb-4" key={pet.id}>
-                        <PetCard pet={pet} /> {/* Assuming PetCard accepts a pet prop */}
-                    </div>
-                ))}
-            </div>
         </div>
     );
 };

@@ -1,13 +1,13 @@
 // src/redux/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './userSlice';
-import petReducer from './petSlice';
+import userReducer from './userSlice'; // Import your user reducer
+import petReducer from './petSlice'; // If you have a pet reducer
 
 const store = configureStore({
-  reducer: {
-    user: userReducer,
-    pets: petReducer,
-  },
+    reducer: {
+        user: userReducer,
+        pets: petReducer, // If applicable
+    },
 });
 
 export default store;

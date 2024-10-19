@@ -1,8 +1,8 @@
-// src/components/PetsPage.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchAllPets } from '../api'; // Import your API function
-import PetList from '../components/PetList';
-import Loader from '../components/Loader';
+import { getPets } from '../api'; // Adjust the path based on your project structure
+import PetCard from '../components/PetCard'; // Adjust the path based on your project structure
+import Spinner from '../components/Spinner'; // Adjust the path based on your project structure
+import './PetsPage.css'; // Adjust the path based on your project structure
 
 const PetsPage = () => {
     const [pets, setPets] = useState([]);
@@ -10,27 +10,42 @@ const PetsPage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const getPets = async () => {
+        const fetchPets = async () => {
             try {
-                const response = await fetchAllPets();
-                setPets(response.data); // Adjust based on your API response structure
-            } catch (error) {
-                setError('Failed to fetch pets. Please try again later.');
+                const petData = await getPets();
+                setPets(petData);
+            } catch (err) {
+                setError(err);
             } finally {
                 setLoading(false);
             }
         };
 
-        getPets();
+        fetchPets();
     }, []);
 
-    if (loading) return <Loader />;
-    if (error) return <div className="text-danger">{error}</div>;
+    if (loading) {
+        return <Spinner />; // Render a spinner while loading
+    }
+
+    if (error) {
+        return <div className="alert alert-danger">{error.message}</div>; // Show error message
+    }
 
     return (
-        <div className="mt-5">
-            <h2 className="text-center mb-4">Available Pets for Adoption</h2>
-            <PetList pets={pets} />
+        <div className="pets-page container">
+            <h1 className="my-4">Available Pets for Adoption</h1>
+            <div className="row">
+                {pets.length > 0 ? (
+                    pets.map((pet) => (
+                        <div key={pet.id} className="col-md-4 mb-4">
+                            <PetCard pet={pet} /> {/* Render PetCard for each pet */}
+                        </div>
+                    ))
+                ) : (
+                    <div className="alert alert-info">No pets available for adoption at this time.</div>
+                )}
+            </div>
         </div>
     );
 };
