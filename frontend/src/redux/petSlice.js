@@ -1,24 +1,25 @@
+// src/redux/petSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { getPets } from '../services/petService';
 
 const petSlice = createSlice({
-    name: 'pets',
-    initialState: {
-        pets: [],
+  name: 'pets',
+  initialState: {
+    pets: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    setPets(state, action) {
+      state.pets = action.payload;
     },
-    reducers: {
-        setPets: (state, action) => {
-            state.pets = action.payload;
-        },
+    setLoading(state, action) {
+      state.loading = action.payload;
     },
+    setError(state, action) {
+      state.error = action.payload;
+    },
+  },
 });
 
-export const { setPets } = petSlice.actions;
-
-// Fetch pets data from the service
-export const fetchPetsData = () => async (dispatch) => {
-    const pets = await getPets();
-    dispatch(setPets(pets));
-};
-
+export const { setPets, setLoading, setError } = petSlice.actions;
 export default petSlice.reducer;

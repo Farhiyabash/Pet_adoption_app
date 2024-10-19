@@ -13,8 +13,8 @@ class Config:
     JWT_TOKEN_LOCATION = ['headers']  # Specify where the token can be found (e.g., in headers)
     
     # Token expiration times
-    JWT_ACCESS_TOKEN_EXPIRES = 7 * 24 * 60 * 60  # Access token expiration time in seconds (7 days)
-    JWT_REFRESH_TOKEN_EXPIRES = 30 * 24 * 60 * 60  # Refresh token expiration time in seconds (30 days)
+    JWT_ACCESS_TOKEN_EXPIRES = 30 * 60  # Access token expiration time in seconds (30 minutes)
+    JWT_REFRESH_TOKEN_EXPIRES = 7 * 24 * 60 * 60  # Refresh token expiration time in seconds (7 days)
 
     # CORS configuration
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')  # Specify allowed origins

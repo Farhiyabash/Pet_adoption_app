@@ -1,11 +1,11 @@
-// ProfilePage.jsx
+// UpdateProfilePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserProfile, updateUserProfile, logoutUser } from '../services/api'; // Adjust the path to your API service
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
+import { getUserProfile, updateUserProfile } from '../api'; // Adjust the import path as needed
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Form, Alert } from 'react-bootstrap';
 
-const ProfilePage = () => {
+const UpdateProfilePage = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -54,16 +54,11 @@ const ProfilePage = () => {
         }
     };
 
-    const handleLogout = async () => {
-        await logoutUser(); // Clear any user tokens and log out
-        navigate('/login');
-    };
-
     if (loading) return <div className="text-center mt-5">Loading...</div>;
 
     return (
         <Container className="mt-5">
-            <h2 className="text-center">Profile</h2>
+            <h2 className="text-center">Update Profile</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">Profile updated successfully!</Alert>}
             {user && (
@@ -93,13 +88,11 @@ const ProfilePage = () => {
                             Update Profile
                         </Button>
                     </Form>
-                    <Button variant="danger" className="mt-3 ms-3" onClick={handleLogout}>
-                        Logout
-                    </Button>
                 </div>
             )}
         </Container>
     );
 };
 
-export default ProfilePage;
+export default UpdateProfilePage;
+

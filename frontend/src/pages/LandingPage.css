@@ -1,0 +1,84 @@
+/* General styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Hero section */
+#hero {
+    background: url('https://images.pexels.com/photos/1938123/pexels-photo-1938123.jpeg') no-repeat center center/cover;
+    background-size: cover;
+    height: 100vh;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+#hero h1 {
+    font-size: 3rem;
+}
+
+#hero .btn {
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+
+/* Feature boxes */
+#features .feature-box {
+    background-color: white;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+#features .feature-box:hover {
+    transform: translateY(-10px);
+}
+
+/* Pet Cards */
+#pet-showcase .card {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+#pet-showcase .card:hover {
+    transform: scale(1.05);
+}
+
+/* Testimonials */
+#testimonials .testimonial {
+    border-radius: 10px;
+}
+
+/* Call to Action */
+#cta {
+    background-color: #ff7f50;
+}
+
+#cta .btn {
+    font-size: 1.2rem;
+}
+
+/* Newsletter Signup */
+#newsletter .newsletter-form input {
+    border-radius: 50px 0 0 50px;
+}
+
+#newsletter .newsletter-form button {
+    border-radius: 0 50px 50px 0;
+}
+
+/* Footer */
+#footer a {
+    color: #ccc;
+}
+
+#footer a:hover {
+    color: white;
+    text-decoration: underline;
+}

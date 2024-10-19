@@ -1,14 +1,24 @@
+// src/components/LandingPage.jsx
 import React from 'react';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import './LandingPage.css'; // Optional CSS for styling
 
 const LandingPage = () => {
     return (
-        <div className="text-center">
-            <h1>Welcome to the Pet Adoption App</h1>
-            <p>Find your new best friend today!</p>
-            <Link to="/signup" className="btn btn-primary mx-2">Sign Up</Link>
-            <Link to="/login" className="btn btn-secondary mx-2">Login</Link>
-        </div>
+        <Container fluid className="landing-page">
+            <Row className="justify-content-center align-items-center text-center h-100">
+                <Col md={8}>
+                    <h1 className="display-4">Welcome to Pet Adoption</h1>
+                    <p className="lead">Find your perfect furry friend today!</p>
+                    <Link to="/pets">
+                        <Button variant="primary" size="lg" className="mt-3">
+                            View All Pets
+                        </Button>
+                    </Link>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

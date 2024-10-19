@@ -1,17 +1,12 @@
+// src/index.js
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom/client';
 import App from './App';
-import store from './redux/store'; 
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap styles
 
-const container = document.getElementById('root');
-const root = createRoot(container);
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Provider store={store}> {/* Wrap App with Provider */}
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
-    </Provider>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );

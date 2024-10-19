@@ -7,7 +7,7 @@ import random
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import create_app, db
-from app.models import User, Pet, Breed, PetType, AdoptionRequest
+from app.models import User, Pet, Breed, PetType, AdoptionRequest, Favorite
 
 # Initialize Faker
 fake = Faker()
@@ -78,6 +78,15 @@ with app.app_context():
             pet_id=random.choice(pets).id
         )
         db.session.add(adoption_request)
+
+    db.session.commit()
+
+    # Seed Favorites
+    for user in users:  # Add favorites for each user
+        favorite_pets = random.sample(pets, k=random.randint(1, 5))  # Choose 1 to 5 random pets as favorites
+        for pet in favorite_pets:
+            favorite = Favorite(user_id=user.id, pet_id=pet.id)
+            db.session.add(favorite)
 
     db.session.commit()
 

@@ -1,23 +1,68 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // Ensure you're using the correct Router
-import Navbar from './components/Navbar'; // Adjust import paths as needed
+// src/App.jsx
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
+import PetsPage from './pages/PetsPage';
+import SignupPage from './pages/SignupPage';
+import FavoritesPage from './pages/FavoritesPage';
+import AdoptionsPage from './pages/AdoptionsPage';
+import ReviewsPage from './pages/ReviewsPage';
 import ProfilePage from './pages/ProfilePage';
+import HomeNavbar from './components/HomeNavbar';  // Corrected path
+import ProtectedRoute from './components/ProtectedRoute'; // Updated path
 
 const App = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // Simulate fetching auth status (replace with actual logic)
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = localStorage.getItem('token'); // Example token check
+            if (token) {
+                setIsAuthenticated(true);
+            }
+        };
+        checkAuth();
+    }, []);
+
     return (
         <Router>
-            <Navbar />
             <Routes>
-                {/* Define your routes */}
+                {/* Landing Page Route */}
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/signup" element={<SignupPage />} />
+
+                {/* Home Page with Navbar */}
+                <Route element={<HomeNavbar />}>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/pets" element={<PetsPage />} />
+                    <Route path="/favorites" element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <FavoritesPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/adoptions" element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <AdoptionsPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/reviews" element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <ReviewsPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/profile" element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    } />
+                </Route>
+
+                {/* 404 Page Route */}
+                <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
         </Router>
     );

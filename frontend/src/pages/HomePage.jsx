@@ -1,13 +1,51 @@
-import React from 'react';
-import HomeNavbar from '../components/HomeNavbar'; // Home specific navbar
+// src/components/HomePage.jsx
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
+import HomeNavbar from '../components/HomeNavbar';
+import PetList from '../components/PetList'; // Import the PetList component
+import { getUserProfile } from '../api';// Function to fetch user profile data
+import { fetchPets } from '../api';// Function to fetch pets data
 
 const HomePage = () => {
+    const [user, setUser] = useState(null);
+    const [pets, setPets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const profileData = await getUserProfile();
+                setUser(profileData);
+                const petData = await fetchPets();
+                setPets(petData);
+            } catch (err) {
+                setError('Failed to fetch data. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div>
             <HomeNavbar />
-            <h1>Available Pets for Adoption</h1>
-            <p>List of pets will be displayed here.</p>
-            {/* Here you can map through your pets data and display them */}
+            <Container className="mt-4">
+                <Row className="justify-content-center">
+                    <Col md={8}>
+                        {loading && <p>Loading...</p>}
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        {user && (
+                            <Alert variant="success">
+                                Welcome, {user.name}! Here are the available pets for adoption.
+                            </Alert>
+                        )}
+                        <PetList pets={pets} />
+                    </Col>
+                </Row>
+            </Container>
         </div>
     );
 };
