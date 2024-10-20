@@ -7,13 +7,11 @@ import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import PetsPage from './pages/PetsPage'; // Import PetsPage
 import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar'; // Import Navbar
 
 const App = () => {
   return (
     <Router>
       <div>
-        <Navbar /> {/* Render Navbar globally, can be conditionally shown */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

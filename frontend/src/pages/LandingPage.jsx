@@ -13,24 +13,56 @@ import logo4 from '../assets/logo4.png';
 const LandingPage = () => {
     // Click handlers for navigation
     const handleAdoptNow = () => {
-        // Navigate to the adoption page (replace with your routing logic)
         window.location.href = '/adopt';
     };
 
     const handleAdoptMe = () => {
-        // Navigate to the adoption page or show adoption modal (replace with your routing logic)
         window.location.href = '/adopt';
     };
 
     const handleSubscribe = (e) => {
         e.preventDefault(); // Prevent default form submission
         const email = e.target.email.value;
-        // Handle email subscription logic (e.g., send email to API)
         console.log('Subscribed with email:', email);
     };
 
     return (
         <div className="landing-page">
+            {/* Navbar */}
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <div className="container">
+                    <a className="navbar-brand" href="/">Pet Adoption</a>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                            <li className="nav-item">
+                                <a className="nav-link" href="#about">About Us</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#pets">Our Pets</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#services">Services</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#partners">Partners</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#newsletter">Subscribe</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="btn btn-primary" href="#signup">Sign Up</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="btn btn-outline-primary ms-2" href="#login">Login</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
             {/* Hero Section */}
             <header className="hero-section text-center">
                 <div className="hero-overlay">
@@ -43,7 +75,7 @@ const LandingPage = () => {
             </header>
 
             {/* About Us Section */}
-            <section className="about-section text-center py-5">
+            <section id="about" className="about-section text-center py-5">
                 <div className="container">
                     <h2 className="section-title">About Us</h2>
                     <p className="section-subtitle">
@@ -53,7 +85,7 @@ const LandingPage = () => {
             </section>
 
             {/* Pets Grid Section */}
-            <section className="pets-section py-5 bg-light">
+            <section id="pets" className="pets-section py-5 bg-light">
                 <div className="container">
                     <h2 className="section-title text-center">Our Pets</h2>
                     <div className="row">
@@ -98,7 +130,7 @@ const LandingPage = () => {
             </section>
 
             {/* Featured Services Section */}
-            <section className="services-section py-5 bg-light">
+            <section id="services" className="services-section py-5 bg-light">
                 <div className="container">
                     <h2 className="section-title text-center">Our Services</h2>
                     <div className="row text-center">
@@ -122,7 +154,7 @@ const LandingPage = () => {
             </section>
 
             {/* Partners Section */}
-            <section className="companies-section py-5 text-center">
+            <section id="partners" className="companies-section py-5 text-center">
                 <div className="container">
                     <h2 className="section-title">Our Partners</h2>
                     <div className="logos-container d-flex justify-content-around align-items-center">
@@ -134,7 +166,7 @@ const LandingPage = () => {
             </section>
 
             {/* Newsletter Section */}
-            <section className="newsletter-section text-center py-5">
+            <section id="newsletter" className="newsletter-section text-center py-5">
                 <div className="container">
                     <h2 className="section-title">Stay Updated</h2>
                     <p>Subscribe to our newsletter for the latest updates and pet adoption news!</p>

@@ -24,7 +24,7 @@ const LoginPage = () => {
             setError('');
             
             setTimeout(() => {
-                navigate('/profile'); // Redirect to the profile page after 2 seconds
+                navigate('/pets'); // Redirect to the profile page after 2 seconds
             }, 2000);
         } catch (error) {
             console.error('Login failed:', error);

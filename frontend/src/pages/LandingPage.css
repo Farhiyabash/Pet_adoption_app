@@ -1,123 +1,126 @@
-/* General Styles */
-.landing-page {
+body {
     font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
 }
 
-.section-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    color: #4f4f4f;
+.landing-page {
+    overflow-x: hidden;
 }
 
-.section-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: #777;
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Hero Section */
 .hero-section {
-    background: url('https://source.unsplash.com/1600x900/?pets') center center/cover no-repeat;
-    height: 100vh;
+    background: url('../assets/hero-background.jpg') no-repeat center center/cover;
+    height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    position: relative;
 }
 
 .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .animated-text {
-    animation: fadeInDown 2s ease;
     font-size: 3rem;
-    color: #fff;
+    font-weight: bold;
 }
 
 .animated-subtext {
     font-size: 1.5rem;
-    margin-top: 1rem;
-    animation: fadeInUp 2.5s ease;
 }
 
-/* Pets Section */
-.pets-section .card {
-    transition: transform 0.3s ease;
+.about-section {
+    background-color: #ffffff;
 }
 
-.pets-section .card:hover {
-    transform: scale(1.05);
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
 }
 
-/* Testimonials */
-.testimonials-section {
-    background-color: #f8f9fa;
+.section-subtitle {
+    font-size: 1.25rem;
 }
 
-.testimonial {
-    background: white;
-    padding: 20px;
+.pets-section {
+    background-color: #f9f9f9;
+}
+
+.pet-image {
     border-radius: 10px;
-    margin: 15px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.testimonials-section {
+    background-color: #ffffff;
+}
+
+.testimonials-container {
+    margin-top: 30px;
 }
 
 .testimonial-img {
     width: 80px;
     height: 80px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    border-radius: 50%;
 }
 
-/* Logos */
+.services-section {
+    background-color: #f9f9f9;
+}
+
+.companies-section {
+    background-color: #ffffff;
+}
+
 .company-logo {
-    width: 150px;
-    margin: 20px;
-    transition: all 0.3s ease-in-out;
+    width: 100px;
+    margin: 0 15px;
 }
 
-.company-logo:hover {
-    transform: scale(1.1);
+.newsletter-section {
+    background-color: #f9f9f9;
 }
 
-/* Animations */
-@keyframes fadeInDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.newsletter-form {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Footer */
-.footer {
+.footer-section {
     background-color: #343a40;
-    color: #fff;
+    color: white;
+}
+
+.social-icons {
+    list-style: none;
+    padding: 0;
+}
+
+.social-icons li {
+    margin: 0 10px;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
