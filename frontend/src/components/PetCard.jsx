@@ -1,9 +1,16 @@
 // src/components/PetCard.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './PetCard.css'; // Import custom CSS for additional styling
 
 const PetCard = ({ pet }) => {
+    const navigate = useNavigate(); // Hook for navigation
+
+    const handleAdopt = () => {
+        navigate(`/adoption-request/${pet.id}`); // Navigate to the adoption request form with pet ID
+    };
+
     return (
         <div className="col-md-4 mb-4">
             <div className="card pet-card h-100 shadow-sm rounded">
@@ -13,7 +20,7 @@ const PetCard = ({ pet }) => {
                     <p className="card-text"><strong>Breed:</strong> {pet.breed}</p>
                     <p className="card-text"><strong>Age:</strong> {pet.age} years</p>
                     <p className="card-text"><strong>Description:</strong> {pet.description}</p>
-                    <button className="btn btn-primary adopt-button">Adopt Me!</button>
+                    <button className="btn btn-primary adopt-button" onClick={handleAdopt}>Adopt Me!</button>
                 </div>
             </div>
         </div>

@@ -1,34 +1,123 @@
-/* src/components/LandingPage.css */
+/* General Styles */
 .landing-page {
-    background-color: #f8f9fa; /* A soft background color */
+    font-family: 'Arial', sans-serif;
 }
 
-.carousel-image {
-    height: 500px; /* Set height for images */
-    object-fit: cover; /* Ensure images cover the entire area without distortion */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #4f4f4f;
 }
 
-.carousel-caption {
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+.section-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #777;
+}
+
+/* Hero Section */
+.hero-section {
+    background: url('https://source.unsplash.com/1600x900/?pets') center center/cover no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    text-align: center;
+}
+
+.animated-text {
+    animation: fadeInDown 2s ease;
+    font-size: 3rem;
+    color: #fff;
+}
+
+.animated-subtext {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    animation: fadeInUp 2.5s ease;
+}
+
+/* Pets Section */
+.pets-section .card {
+    transition: transform 0.3s ease;
+}
+
+.pets-section .card:hover {
+    transform: scale(1.05);
+}
+
+/* Testimonials */
+.testimonials-section {
+    background-color: #f8f9fa;
+}
+
+.testimonial {
+    background: white;
     padding: 20px;
     border-radius: 10px;
+    margin: 15px;
 }
 
-.text-center {
-    margin-top: 20px;
-}
-/* src/components/LandingPage.css */
-
-.landing-page {
-    background-color: #f8f9fa; /* Soft background color */
-    min-height: 100vh; /* Full height */
+.testimonial-img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
 }
 
-.carousel-image {
-    height: 60vh; /* Fixed height for carousel images */
-    object-fit: cover; /* Cover the area without distortion */
+/* Logos */
+.company-logo {
+    width: 150px;
+    margin: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
-.card {
-    margin-bottom: 20px;
+.company-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #343a40;
+    color: #fff;
 }

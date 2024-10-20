@@ -1,131 +1,161 @@
-// src/components/LandingPage.jsx
 import React from 'react';
-import { Container, Row, Col, Button, Card, Carousel } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './LandingPage.css'; // Ensure this file contains necessary styles
+import './LandingPage.css'; // Custom CSS for animations and styles
+import 'bootstrap/dist/css/bootstrap.min.css';
+import pet1 from '../assets/pet1.jpg';
+import pet2 from '../assets/pet2.jpg';
+import pet3 from '../assets/pet3.jpg';
+import pet4 from '../assets/pet4.jpg';
+import logo1 from '../assets/logo1.png';
+import logo2 from '../assets/logo2.png';
+import logo3 from '../assets/logo3.png';
+import logo4 from '../assets/logo4.png';
 
 const LandingPage = () => {
+    // Click handlers for navigation
+    const handleAdoptNow = () => {
+        // Navigate to the adoption page (replace with your routing logic)
+        window.location.href = '/adopt';
+    };
+
+    const handleAdoptMe = () => {
+        // Navigate to the adoption page or show adoption modal (replace with your routing logic)
+        window.location.href = '/adopt';
+    };
+
+    const handleSubscribe = (e) => {
+        e.preventDefault(); // Prevent default form submission
+        const email = e.target.email.value;
+        // Handle email subscription logic (e.g., send email to API)
+        console.log('Subscribed with email:', email);
+    };
+
     return (
-        <Container fluid className="landing-page">
-            {/* Carousel Section */}
-            <Carousel className="my-4" interval={3000} fade>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100 carousel-image"
-                        src="https://images.unsplash.com/photo-1560807707-8cc77767d783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fHBldHxlbnBnfGVufDB8fHx8MTY4NTI0NzMwNw&ixlib=rb-4.0.3&q=80&w=1080" // 4K image of a dog
-                        alt="Dog"
-                    />
-                    <Carousel.Caption>
-                        <h3>Find Your Best Friend</h3>
-                        <p>Discover a loving pet waiting for you!</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100 carousel-image"
-                        src="https://images.unsplash.com/photo-1603214148700-1014e702b4cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIyfHxjYXR8ZW58MHx8fHwxNjg1MjQ3MzA3&ixlib=rb-4.0.3&q=80&w=1080" // 4K image of a cat
-                        alt="Cat"
-                    />
-                    <Carousel.Caption>
-                        <h3>Adopt, Don't Shop</h3>
-                        <p>Join us in making a difference in pets' lives.</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100 carousel-image"
-                        src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDE1fHxwZXQlMjBhZG9wdGVyfGVufDB8fHx8MTY4NTI0NzMwNw&ixlib=rb-4.0.3&q=80&w=1080" // 4K image of a dog and cat together
-                        alt="Dog and Cat Together"
-                    />
-                    <Carousel.Caption>
-                        <h3>Love Awaits</h3>
-                        <p>Every pet deserves a forever home.</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100 carousel-image"
-                        src="https://images.unsplash.com/photo-1583502023164-5f5ff8c0a5ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfHxwZXQlMjBhbmltYWwlMjBmb3J8ZW58MHx8fHwxNjg1MjQ3MzA3&ixlib=rb-4.0.3&q=80&w=1080" // 4K image of a playful puppy
-                        alt="Playful Puppy"
-                    />
-                    <Carousel.Caption>
-                        <h3>Adopt Your Furry Friend</h3>
-                        <p>Find joy in adopting a pet today!</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <img
-                        className="d-block w-100 carousel-image"
-                        src="https://images.unsplash.com/photo-1561948952-4f53db2227b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEzfHxwZXQlMjBpbWFnZXxlbnBnfGVufDB8fHx8MTY4NTI0NzMwNw&ixlib=rb-4.0.3&q=80&w=1080" // 4K image of a cat
-                        alt="Cute Cat"
-                    />
-                    <Carousel.Caption>
-                        <h3>Make a Difference</h3>
-                        <p>Help us give every pet a loving home.</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-            </Carousel>
+        <div className="landing-page">
+            {/* Hero Section */}
+            <header className="hero-section text-center">
+                <div className="hero-overlay">
+                    <div className="hero-content">
+                        <h1 className="animated-text">Find Your New Best Friend</h1>
+                        <p className="animated-subtext">Adopt the perfect companion today!</p>
+                        <button onClick={handleAdoptNow} className="btn btn-primary btn-lg mt-3">Adopt Now</button>
+                    </div>
+                </div>
+            </header>
 
-            {/* Main Content Section */}
-            <Row className="justify-content-center text-center">
-                <Col md={8}>
-                    <h1 className="display-4">Welcome to Pet Adoption</h1>
-                    <p className="lead">Find your perfect furry friend today!</p>
-                    <Link to="/pets">
-                        <Button variant="success" size="lg" className="mt-3">
-                            View All Pets
-                        </Button>
-                    </Link>
-                </Col>
-            </Row>
+            {/* About Us Section */}
+            <section className="about-section text-center py-5">
+                <div className="container">
+                    <h2 className="section-title">About Us</h2>
+                    <p className="section-subtitle">
+                        We are dedicated to helping pets find loving homes. Our mission is to provide a safe haven for animals and connect them with families.
+                    </p>
+                </div>
+            </section>
 
-            {/* Cards Section */}
-            <Row className="mt-5">
-                <Col md={4}>
-                    <Card className="text-center">
-                        <Card.Img variant="top" src="https://images.unsplash.com/photo-1516589182007-43c3bb5f7c56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fHBldHxlbnBnfGVufDB8fHx8MTY4NTI0NzMwNw&ixlib=rb-4.0.3&q=80&w=1080" />
-                        <Card.Body>
-                            <Card.Title>About Us</Card.Title>
-                            <Card.Text>
-                                We are dedicated to helping you find your new best friend. Our mission is to
-                                ensure every pet finds a loving home.
-                            </Card.Text>
-                            <Link to="/about">
-                                <Button variant="link">Learn More</Button>
-                            </Link>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="text-center">
-                        <Card.Img variant="top" src="https://images.unsplash.com/photo-1613267380786-f7b92fc80ff0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIyfHxjYXR8ZW58MHx8fHwxNjg1MjQ3MzA3&ixlib=rb-4.0.3&q=80&w=1080" />
-                        <Card.Body>
-                            <Card.Title>Contact Us</Card.Title>
-                            <Card.Text>
-                                Have questions? We're here to help! Reach out to us anytime.
-                            </Card.Text>
-                            <Link to="/contact">
-                                <Button variant="link">Get in Touch</Button>
-                            </Link>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="text-center">
-                        <Card.Img variant="top" src="https://images.unsplash.com/photo-1601615840751-d99a8bc5103f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDEwfHxwZXQlMjBhZG9wdGVyfGVufDB8fHx8MTY4NTI0NzMwNw&ixlib=rb-4.0.3&q=80&w=1080" />
-                        <Card.Body>
-                            <Card.Title>Testimonials</Card.Title>
-                            <Card.Text>
-                                Hear from our happy adopters! Their stories inspire us every day.
-                            </Card.Text>
-                            <Link to="/testimonials">
-                                <Button variant="link">Read Stories</Button>
-                            </Link>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+            {/* Pets Grid Section */}
+            <section className="pets-section py-5 bg-light">
+                <div className="container">
+                    <h2 className="section-title text-center">Our Pets</h2>
+                    <div className="row">
+                        {[pet1, pet2, pet3, pet4].map((pet, index) => (
+                            <div className="col-md-3 mb-4" key={index}>
+                                <div className="card shadow-lg hover-zoom">
+                                    <img src={pet} alt={`Pet ${index + 1}`} className="card-img-top pet-image" />
+                                    <div className="card-body text-center">
+                                        <h5 className="card-title">Pet Name {index + 1}</h5>
+                                        <p className="card-text">Friendly, playful, and ready to find a home!</p>
+                                        <button onClick={handleAdoptMe} className="btn btn-primary">Adopt Me</button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials Section */}
+            <section className="testimonials-section py-5">
+                <div className="container">
+                    <h2 className="section-title text-center">What Our Clients Say</h2>
+                    <div className="testimonials-container d-flex justify-content-around">
+                        <div className="testimonial text-center">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Client 1" className="testimonial-img rounded-circle" />
+                            <p>"Adopting from this center changed my life! My dog is the best companion!"</p>
+                            <h5>John Bieber</h5>
+                        </div>
+                        <div className="testimonial text-center">
+                            <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Client 2" className="testimonial-img rounded-circle" />
+                            <p>"The staff was incredibly helpful and matched me with the perfect pet."</p>
+                            <h5>Jane Williams</h5>
+                        </div>
+                        <div className="testimonial text-center">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Client 3" className="testimonial-img rounded-circle" />
+                            <p>"I can't imagine my life without my furry friend. Thank you!"</p>
+                            <h5>Mike Johnson</h5>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Featured Services Section */}
+            <section className="services-section py-5 bg-light">
+                <div className="container">
+                    <h2 className="section-title text-center">Our Services</h2>
+                    <div className="row text-center">
+                        <div className="col-md-4">
+                            <i className="fas fa-heart fa-3x text-primary"></i>
+                            <h5 className="mt-3">Pet Adoption</h5>
+                            <p>We help match pets with loving families.</p>
+                        </div>
+                        <div className="col-md-4">
+                            <i className="fas fa-paw fa-3x text-primary"></i>
+                            <h5 className="mt-3">Veterinary Care</h5>
+                            <p>Ensuring the health of your new companion.</p>
+                        </div>
+                        <div className="col-md-4">
+                            <i className="fas fa-bone fa-3x text-primary"></i>
+                            <h5 className="mt-3">Pet Supplies</h5>
+                            <p>Everything you need for your pet’s happiness.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Partners Section */}
+            <section className="companies-section py-5 text-center">
+                <div className="container">
+                    <h2 className="section-title">Our Partners</h2>
+                    <div className="logos-container d-flex justify-content-around align-items-center">
+                        {[logo1, logo2, logo3, logo4].map((logo, index) => (
+                            <img key={index} src={logo} alt={`Company Logo ${index + 1}`} className="company-logo" />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Newsletter Section */}
+            <section className="newsletter-section text-center py-5">
+                <div className="container">
+                    <h2 className="section-title">Stay Updated</h2>
+                    <p>Subscribe to our newsletter for the latest updates and pet adoption news!</p>
+                    <form className="newsletter-form d-flex justify-content-center" onSubmit={handleSubscribe}>
+                        <input type="email" name="email" className="form-control" placeholder="Enter your email" required />
+                        <button type="submit" className="btn btn-primary ml-2">Subscribe</button>
+                    </form>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="footer-section text-center py-4">
+                <p>&copy; 2024 Pet Adoption Center. All Rights Reserved.</p>
+                <ul className="social-icons d-flex justify-content-center">
+                    <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#"><i className="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i className="fab fa-instagram"></i></a></li>
+                    <li><a href="#"><i className="fab fa-linkedin-in"></i></a></li>
+                </ul>
+            </footer>
+        </div>
     );
 };
 

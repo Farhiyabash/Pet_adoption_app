@@ -4,7 +4,7 @@ from flask_jwt_extended import (
     get_jwt_identity, set_access_cookies, unset_jwt_cookies
 )
 from flask_cors import cross_origin
-from app.models import User, Pet, Breed, PetType, Review, Reply, Adoption, Favorite
+from app.models import User, Pet, Breed, PetType, Review, Reply, Adoption, Favorite,AdoptionRequest
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
@@ -399,3 +399,58 @@ def delete_favorite(id):
     db.session.commit()
     
     return jsonify({'message': 'Favorite deleted successfully.'}), 200
+
+
+    # ---------- ADOPTION REQUEST ROUTES ----------
+@routes_app.route('/adoption-requests', methods=['GET'])
+@jwt_required()
+def get_adoption_requests():
+    requests = AdoptionRequest.query.all()
+    return jsonify([request.to_dict() for request in requests]), 200
+
+@routes_app.route('/adoption-requests', methods=['POST'])
+@jwt_required()
+def create_adoption_request():
+    data = request.get_json()
+
+    if not all([data.get('message'), data.get('user_id'), data.get('pet_id')]):
+        return abort(400, description="Missing required fields.")
+
+    new_adoption_request = AdoptionRequest(
+        message=data['message'],
+        user_id=data['user_id'],
+        pet_id=data['pet_id'],
+        status=data.get('status', 'pending')
+    )
+    
+    db.session.add(new_adoption_request)
+    db.session.commit()
+
+    return jsonify(new_adoption_request.to_dict()), 201
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['GET'])
+@jwt_required()
+def get_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    return jsonify(adoption_request.to_dict()), 200
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    data = request.get_json()
+
+    adoption_request.message = data.get('message', adoption_request.message)
+    adoption_request.status = data.get('status', adoption_request.status)
+
+    db.session.commit()
+    return jsonify(adoption_request.to_dict()), 200
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    db.session.delete(adoption_request)
+    db.session.commit()
+
+    return jsonify({'message': 'Adoption request deleted successfully.'}), 200

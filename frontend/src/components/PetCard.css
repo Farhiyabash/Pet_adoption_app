@@ -62,27 +62,28 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-/* src/styles/Alert.css */
-.alert {
-    color: red;
-    text-align: center;
-    margin: 20px 0;
-}
 /* src/components/PetCard.css */
 .pet-card {
-    transition: transform 0.2s; /* Animation for hover effect */
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
 }
 
-.pet-card:hover {
-    transform: scale(1.05); /* Scale effect on hover */
+.pet-card img {
+    max-width: 100%;
+    border-radius: 8px;
 }
 
-.pet-image {
-    height: 200px; /* Fixed height for images */
-    object-fit: cover; /* Crop images nicely */
+/* src/components/PetCard.css */
+.pet-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
 }
 
-.adopt-button {
-    width: 100%; /* Full width button */
+.pet-card img {
+    max-width: 100%;
+    border-radius: 8px;
 }

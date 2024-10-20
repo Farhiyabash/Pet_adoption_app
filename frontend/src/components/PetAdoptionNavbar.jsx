@@ -1,9 +1,10 @@
+// src/components/PetAdoptionNavbar.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { logoutUser } from '../services/api'; // Adjust path if necessary
+import { logoutUser } from '../services/api';
 import { Navbar as BootstrapNavbar, Nav, Container, Form, Button } from 'react-bootstrap';
 
-const HomeNavbar = () => {
+const PetAdoptionNavbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -23,28 +24,26 @@ const HomeNavbar = () => {
                 <BootstrapNavbar.Brand as={Link} to="/">
                     <img
                         src="/logo.png"
-                        alt="Pet Adoption Logo"
+                        alt="PetFinder Logo"
                         style={{ width: '50px', marginRight: '10px' }}
                     />
                 </BootstrapNavbar.Brand>
-                <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
-                <BootstrapNavbar.Collapse id="basic-navbar-nav">
+                <BootstrapNavbar.Toggle aria-controls="navbar-content" />
+                <BootstrapNavbar.Collapse id="navbar-content">
                     <Form className="d-flex mx-auto" style={{ maxWidth: '500px', width: '100%' }}>
                         <Form.Control
                             type="search"
-                            placeholder="Search pets..."
+                            placeholder="Find your perfect pet..."
                             className="me-2"
                             aria-label="Search"
                         />
-                        <Button variant="outline-primary">Search</Button>
+                        <Button variant="outline-success">Search</Button>
                     </Form>
                     <Nav className="ms-auto">
-                        <Nav.Link as={Link} to="/pets">All Pets</Nav.Link>
-                        <Nav.Link as={Link} to="/favorites">Favorites</Nav.Link>
-                        <Nav.Link as={Link} to="/adoptions">Adoptions</Nav.Link>
-                        <Nav.Link as={Link} to="/reviews">Reviews</Nav.Link>
-                        <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
-                        <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                        <Nav.Link as={Link} to="/adoption-requests">My Adoption Requests</Nav.Link>
+                        <Nav.Link as={Link} to="/pets">Explore Pets</Nav.Link>
+                        <Nav.Link as={Link} to="/profile">My Profile</Nav.Link>
+                        <Nav.Link onClick={handleLogout}>Sign Out</Nav.Link>
                     </Nav>
                 </BootstrapNavbar.Collapse>
             </Container>
@@ -52,4 +51,4 @@ const HomeNavbar = () => {
     );
 };
 
-export default HomeNavbar;
+export default PetAdoptionNavbar;

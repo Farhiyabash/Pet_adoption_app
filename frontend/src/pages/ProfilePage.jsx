@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUserProfile } from '../services/userService';
-import HomeNavbar from '../components/HomeNavbar';
+import HomeNavbar from '../components/PetAdoptionNavbar';
 
 const ProfilePage = () => {
     const [profile, setProfile] = useState(null);

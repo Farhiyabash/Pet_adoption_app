@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { registerUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 import './SignUpPage.css'; // Import custom CSS
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 
 const SignUpPage = () => {
     const [name, setName] = useState('');
@@ -37,11 +38,11 @@ const SignUpPage = () => {
 
     return (
         <div className="signup-container d-flex justify-content-center align-items-center vh-100">
-            <div className="card shadow p-4">
-                <h2 className="text-center mb-4">Create Your Account</h2>
+            <div className="card shadow-lg p-4" style={{ width: '400px', borderRadius: '15px' }}>
+                <h2 className="text-center mb-4" style={{ color: '#007bff' }}>Create Your Account</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
-                        <label htmlFor="name">Full Name</label>
+                        <label htmlFor="name" className="text-muted">Full Name</label>
                         <input
                             type="text"
                             id="name"
@@ -53,7 +54,7 @@ const SignUpPage = () => {
                         />
                     </div>
                     <div className="form-group mb-3">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email" className="text-muted">Email</label>
                         <input
                             type="email"
                             id="email"
@@ -65,7 +66,7 @@ const SignUpPage = () => {
                         />
                     </div>
                     <div className="form-group mb-3">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password" className="text-muted">Password</label>
                         <input
                             type="password"
                             id="password"
@@ -86,6 +87,10 @@ const SignUpPage = () => {
                 </form>
                 {success && <div className="alert alert-success mt-3">{success}</div>}
                 {error && <div className="alert alert-danger mt-3">{error}</div>}
+                <div className="text-center mt-3">
+                    <span>Already have an account? </span>
+                    <a href="/login" className="text-primary">Login here</a>
+                </div>
             </div>
         </div>
     );

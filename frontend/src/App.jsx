@@ -1,36 +1,52 @@
 // src/App.jsx
+
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+import SignUpPage from './pages/SignUpPage';
 import ProfilePage from './pages/ProfilePage';
-import PetsPage from './pages/PetsPage'; // Import PetsPage
-import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar'; // Import Navbar
+import PetsPage from './pages/PetsPage'; // Import the PetsPage
+import PetAdoptionNavbar from './components/PetAdoptionNavbar';
+import ProtectedRoute from './components/ProtectedRoute'; // A custom component to protect routes
 
 const App = () => {
-  return (
-    <Router>
-      <div>
-        <Navbar /> {/* Render Navbar globally, can be conditionally shown */}
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/pets" element={<PetsPage />} /> {/* Add PetsPage route */}
-          <Route 
-            path="/profile" 
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            } 
-          />
-        </Routes>
-      </div>
-    </Router>
-  );
+    const isAuthenticated = !!localStorage.getItem('access_token');
+
+    return (
+        <Router>
+            {/* Conditional Navbar: Show different navbar based on authentication status */}
+            {isAuthenticated && <PetAdoptionNavbar />}
+
+            <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<SignUpPage />} />
+
+                {/* Protected routes */}
+                <Route 
+                    path="/profile" 
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/pets" 
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <PetsPage />
+                        </ProtectedRoute>
+                    } 
+                />
+
+                {/* Redirect any unknown routes to the landing page */}
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;

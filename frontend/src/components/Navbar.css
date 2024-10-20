@@ -1,32 +1,17 @@
-/* Navbar styles */
+/* src/components/Navbar.css */
 .navbar {
-  background-color: #f8f9fa !important;
-  padding: 1rem 0;
+  border-bottom: 2px solid #f1c40f; /* Add a bottom border */
 }
 
 .navbar-brand {
-  font-weight: bold;
-  color: #2c3e50 !important;
+  font-weight: bold; /* Make brand name bold */
 }
 
-.navbar-nav .nav-link {
-  color: #2c3e50 !important;
+.nav-link {
+  font-size: 1.1rem; /* Slightly increase font size */
+  color: #34495e; /* Custom link color */
 }
 
-.navbar-nav .nav-link:hover {
-  color: #007bff !important;
-}
-
-.navbar-toggler-icon {
-  background-color: #007bff;
-}
-
-.btn-outline-danger {
-  color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: white;
+.nav-link:hover {
+  color: #f1c40f; /* Change color on hover */
 }

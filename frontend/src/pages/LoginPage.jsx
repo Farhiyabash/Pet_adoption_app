@@ -1,7 +1,9 @@
+// src/components/LoginPage.jsx
 import React, { useState } from 'react';
 import { loginUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css'; // Import custom CSS
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -15,21 +17,22 @@ const LoginPage = () => {
         e.preventDefault();
         const credentials = { email, password };
         setLoading(true);
+        setSuccess('');
+        setError('');
 
         try {
             const data = await loginUser(credentials);
             localStorage.setItem('access_token', data.accessToken);
             localStorage.setItem('refresh_token', data.refreshToken);
             setSuccess('Successfully logged in!');
-            setError('');
             
+            // Redirect to the PetsPage after a short delay
             setTimeout(() => {
-                navigate('/profile'); // Redirect to the profile page after 2 seconds
+                navigate('/pets'); // Redirect to the PetsPage
             }, 2000);
         } catch (error) {
             console.error('Login failed:', error);
             setError('Login failed. Please check your credentials.');
-            setSuccess('');
         } finally {
             setLoading(false);
         }
@@ -37,11 +40,11 @@ const LoginPage = () => {
 
     return (
         <div className="login-container d-flex justify-content-center align-items-center vh-100">
-            <div className="card shadow p-4">
-                <h2 className="text-center mb-4">Login to Your Account</h2>
+            <div className="card shadow-lg p-4" style={{ width: '400px', borderRadius: '15px' }}>
+                <h2 className="text-center mb-4" style={{ color: '#007bff' }}>Login to Your Account</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email" className="text-muted">Email</label>
                         <input
                             type="email"
                             id="email"
@@ -53,7 +56,7 @@ const LoginPage = () => {
                         />
                     </div>
                     <div className="form-group mb-3">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password" className="text-muted">Password</label>
                         <input
                             type="password"
                             id="password"
@@ -74,6 +77,13 @@ const LoginPage = () => {
                 </form>
                 {success && <div className="alert alert-success mt-3">{success}</div>}
                 {error && <div className="alert alert-danger mt-3">{error}</div>}
+                <div className="text-center mt-3">
+                    <a href="/forgot-password" className="text-primary">Forgot Password?</a>
+                </div>
+                <div className="text-center mt-2">
+                    <span>Don't have an account? </span>
+                    <a href="/register" className="text-primary">Sign Up</a>
+                </div>
             </div>
         </div>
     );
