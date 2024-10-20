@@ -2,6 +2,7 @@ import sys
 import os
 from faker import Faker
 import random
+import requests
 
 # Add the project root directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -55,15 +56,30 @@ with app.app_context():
 
     db.session.commit()
 
+    # Function to fetch a random image URL from The Dog API or The Cat API
+    def fetch_pet_image(pet_type):
+        if pet_type.lower() == 'dog':
+            response = requests.get("https://dog.ceo/api/breeds/image/random")
+            if response.status_code == 200:
+                return response.json()['message']
+        elif pet_type.lower() == 'cat':
+            response = requests.get("https://api.thecatapi.com/v1/images/search")
+            if response.status_code == 200:
+                return response.json()[0]['url']
+        return "https://example.com/default_pet_image.jpg"  # Fallback image URL
+
     # Seed Pets
     pets = []
     for _ in range(20):  # Create 20 pets
+        pet_name = fake.first_name()
+        pet_type = random.choice(pet_type_objs)
         pet = Pet(
-            name=fake.first_name(),
+            name=pet_name,
             age=random.randint(1, 15),  # Age between 1 and 15
             description=fake.text(max_nb_chars=100),
-            pet_type_id=random.choice(pet_type_objs).id,
-            owner_id=random.choice(users).id
+            pet_type_id=pet_type.id,
+            owner_id=random.choice(users).id,
+            image_url=fetch_pet_image(pet_type.name)  # Fetch a real image URL
         )
         db.session.add(pet)
         pets.append(pet)

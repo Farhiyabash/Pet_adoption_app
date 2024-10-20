@@ -119,13 +119,14 @@ def get_pets():
 @jwt_required()
 def create_pet():
     data = request.get_json()
-    if not all([data.get('name'), data.get('age'), data.get('pet_type_id'), data.get('owner_id')]):
+    if not all([data.get('name'), data.get('age'), data.get('pet_type_id'), data.get('owner_id'), data.get('image_url')]):
         return abort(400, description="Missing required fields.")
     
     new_pet = Pet(
         name=data['name'],
         age=data['age'],
         description=data.get('description', ''),
+        image_url=data['image_url'],  # Capture the image URL from the request
         pet_type_id=data['pet_type_id'],
         owner_id=data['owner_id']
     )
