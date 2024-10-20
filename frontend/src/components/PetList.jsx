@@ -1,16 +1,21 @@
 // src/components/PetList.jsx
 import React from 'react';
-import { Row } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import PetCard from './PetCard';
 
 const PetList = ({ pets }) => {
     return (
-        <Row>
-            {pets.map((pet) => (
-                <PetCard key={pet.id} pet={pet} />
-            ))}
-        </Row>
+        <div className="container">
+            <div className="row">
+                {pets.length === 0 ? (
+                    <div className="col-12">
+                        <p>No pets available for adoption at the moment.</p>
+                    </div>
+                ) : (
+                    pets.map((pet) => <PetCard key={pet.id} pet={pet} />)
+                )}
+            </div>
+        </div>
     );
 };
 
@@ -19,6 +24,7 @@ PetList.propTypes = {
         PropTypes.shape({
             id: PropTypes.number.isRequired,
             name: PropTypes.string.isRequired,
+            breed: PropTypes.string.isRequired,
             age: PropTypes.number.isRequired,
             description: PropTypes.string.isRequired,
             imageUrl: PropTypes.string.isRequired,

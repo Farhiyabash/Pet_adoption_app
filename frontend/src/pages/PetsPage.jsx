@@ -1,8 +1,10 @@
+// src/pages/PetsPage.jsx
+
 import React, { useEffect, useState } from 'react';
-import { getPets } from '../api'; // Adjust the path based on your project structure
-import PetCard from '../components/PetCard'; // Adjust the path based on your project structure
-import Spinner from '../components/Spinner'; // Adjust the path based on your project structure
-import './PetsPage.css'; // Adjust the path based on your project structure
+import { fetchPets } from '../services/PetService';
+import PetList from '../components/PetList';
+import Spinner from '../components/Spinner'; // You might want to create a spinner component for loading states
+import Alert from '../components/Alert'; // An alert component for error handling
 
 const PetsPage = () => {
     const [pets, setPets] = useState([]);
@@ -10,42 +12,27 @@ const PetsPage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchPets = async () => {
+        const loadPets = async () => {
             try {
-                const petData = await getPets();
-                setPets(petData);
+                const petsData = await fetchPets();
+                setPets(petsData);
             } catch (err) {
-                setError(err);
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchPets();
+        loadPets();
     }, []);
 
-    if (loading) {
-        return <Spinner />; // Render a spinner while loading
-    }
-
-    if (error) {
-        return <div className="alert alert-danger">{error.message}</div>; // Show error message
-    }
+    if (loading) return <Spinner />;
+    if (error) return <Alert message={error} />;
 
     return (
-        <div className="pets-page container">
-            <h1 className="my-4">Available Pets for Adoption</h1>
-            <div className="row">
-                {pets.length > 0 ? (
-                    pets.map((pet) => (
-                        <div key={pet.id} className="col-md-4 mb-4">
-                            <PetCard pet={pet} /> {/* Render PetCard for each pet */}
-                        </div>
-                    ))
-                ) : (
-                    <div className="alert alert-info">No pets available for adoption at this time.</div>
-                )}
-            </div>
+        <div className="pets-page">
+            <h1>Available Pets for Adoption</h1>
+            <PetList pets={pets} />
         </div>
     );
 };
