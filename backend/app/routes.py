@@ -4,11 +4,12 @@ from flask_jwt_extended import (
     get_jwt_identity, set_access_cookies, unset_jwt_cookies
 )
 from flask_cors import cross_origin
-from app.models import User, Pet, Breed, PetType, Review, Reply
+from app.models import User, Pet, Breed, PetType, Review, Reply, Adoption, Favorite,AdoptionRequest
 from app.extensions import db
 
 routes_app = Blueprint('routes_app', __name__)
 
+# Cross-Origin Resource Sharing (CORS) headers
 @routes_app.after_request
 @cross_origin()
 def add_cors_headers(response):
@@ -19,15 +20,15 @@ def add_cors_headers(response):
 @routes_app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
+    
     if not data.get('name') or not data.get('email') or not data.get('password'):
         return abort(400, description="Name, email, and password are required.")
 
-    existing_user = User.query.filter_by(email=data['email']).first()
-    if existing_user:
+    if User.query.filter_by(email=data['email']).first():
         return abort(400, description="Email already registered.")
 
     new_user = User(name=data['name'], email=data['email'])
-    new_user.set_password(data['password'])  # Hash the password
+    new_user.set_password(data['password'])  # Hash password before saving
     db.session.add(new_user)
     db.session.commit()
 
@@ -36,18 +37,21 @@ def create_user():
 @routes_app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
 
-    if not email or not password:
+    if not data.get('email') or not data.get('password'):
         return abort(400, description="Email and password are required.")
 
-    user = User.query.filter_by(email=email).first()
-    if user and user.verify_password(password):
+    user = User.query.filter_by(email=data['email']).first()
+
+    if user and user.verify_password(data['password']):
         access_token = create_access_token(identity={'id': user.id, 'email': user.email})
         refresh_token = create_refresh_token(identity={'id': user.id, 'email': user.email})
 
-        response = jsonify({'access_token': access_token, 'refresh_token': refresh_token, 'name': user.name})
+        response = jsonify({
+            'access_token': access_token, 
+            'refresh_token': refresh_token, 
+            'name': user.name
+        })
         set_access_cookies(response, access_token)
         return response, 200
     else:
@@ -58,6 +62,7 @@ def login():
 def refresh_token():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity)
+    
     response = jsonify({'access_token': access_token})
     set_access_cookies(response, access_token)
     return response, 200
@@ -77,13 +82,14 @@ def check_email():
         return abort(400, description="Email is required.")
 
     existing_user = User.query.filter_by(email=email).first()
-    return jsonify({'available': not existing_user is not None}), 200
+    return jsonify({'available': existing_user is None}), 200
 
 @routes_app.route('/users/profile', methods=['GET'])
 @jwt_required()
 def get_user_profile():
     current_user = get_jwt_identity()
     user = User.query.get_or_404(current_user['id'])
+    
     return jsonify({
         'id': user.id,
         'name': user.name,
@@ -113,18 +119,20 @@ def get_pets():
 @jwt_required()
 def create_pet():
     data = request.get_json()
-    if not data.get('name') or not data.get('age') or not data.get('pet_type_id') or not data.get('owner_id'):
-        return abort(400, description="Missing required fields")
+    if not all([data.get('name'), data.get('age'), data.get('pet_type_id'), data.get('owner_id'), data.get('image_url')]):
+        return abort(400, description="Missing required fields.")
     
     new_pet = Pet(
         name=data['name'],
         age=data['age'],
         description=data.get('description', ''),
+        image_url=data['image_url'],  # Capture the image URL from the request
         pet_type_id=data['pet_type_id'],
         owner_id=data['owner_id']
     )
     db.session.add(new_pet)
     db.session.commit()
+    
     return jsonify(new_pet.to_dict()), 201
 
 @routes_app.route('/pets/<int:id>', methods=['GET'])
@@ -138,7 +146,7 @@ def get_pet(id):
 def update_pet(id):
     pet = Pet.query.get_or_404(id)
     data = request.get_json()
-    
+
     pet.name = data.get('name', pet.name)
     pet.age = data.get('age', pet.age)
     pet.description = data.get('description', pet.description)
@@ -155,11 +163,10 @@ def delete_pet(id):
     db.session.delete(pet)
     try:
         db.session.commit()
-        return jsonify({'message': 'Pet deleted successfully'}), 200
+        return jsonify({'message': 'Pet deleted successfully.'}), 200
     except Exception as e:
-        db.session.rollback()  # Rollback the session in case of an error
+        db.session.rollback()
         return jsonify({'error': str(e)}), 400
-
 
 # ---------- BREED ROUTES ----------
 @routes_app.route('/breeds', methods=['GET'])
@@ -172,12 +179,14 @@ def get_breeds():
 @jwt_required()
 def create_breed():
     data = request.get_json()
+
     if not data.get('name'):
         return abort(400, description="Breed name is required.")
     
     new_breed = Breed(name=data['name'])
     db.session.add(new_breed)
     db.session.commit()
+
     return jsonify(new_breed.to_dict()), 201
 
 # ---------- PET TYPE ROUTES ----------
@@ -191,12 +200,14 @@ def get_pet_types():
 @jwt_required()
 def create_pet_type():
     data = request.get_json()
+
     if not data.get('name'):
         return abort(400, description="Pet type name is required.")
     
     new_pet_type = PetType(name=data['name'])
     db.session.add(new_pet_type)
     db.session.commit()
+
     return jsonify(new_pet_type.to_dict()), 201
 
 # ---------- REVIEW ROUTES ----------
@@ -210,8 +221,9 @@ def get_reviews():
 @jwt_required()
 def create_review():
     data = request.get_json()
-    if not data.get('content') or not data.get('rating') or not data.get('user_id') or not data.get('pet_id'):
-        return abort(400, description="Missing required fields")
+    
+    if not all([data.get('content'), data.get('rating'), data.get('user_id'), data.get('pet_id')]):
+        return abort(400, description="Missing required fields.")
     
     new_review = Review(
         content=data['content'],
@@ -221,6 +233,7 @@ def create_review():
     )
     db.session.add(new_review)
     db.session.commit()
+    
     return jsonify(new_review.to_dict()), 201
 
 @routes_app.route('/reviews/<int:id>', methods=['GET'])
@@ -234,10 +247,10 @@ def get_review(id):
 def update_review(id):
     review = Review.query.get_or_404(id)
     data = request.get_json()
-    
+
     review.content = data.get('content', review.content)
     review.rating = data.get('rating', review.rating)
-    
+
     db.session.commit()
     return jsonify(review.to_dict()), 200
 
@@ -247,15 +260,17 @@ def delete_review(id):
     review = Review.query.get_or_404(id)
     db.session.delete(review)
     db.session.commit()
-    return jsonify({'message': 'Review deleted successfully'}), 200
+    
+    return jsonify({'message': 'Review deleted successfully.'}), 200
 
 # ---------- REPLY ROUTES ----------
 @routes_app.route('/replies', methods=['POST'])
 @jwt_required()
 def create_reply():
     data = request.get_json()
-    if not data.get('content') or not data.get('review_id') or not data.get('user_id'):
-        return abort(400, description="Missing required fields")
+    
+    if not all([data.get('content'), data.get('review_id'), data.get('user_id')]):
+        return abort(400, description="Missing required fields.")
     
     new_reply = Reply(
         content=data['content'],
@@ -264,29 +279,178 @@ def create_reply():
     )
     db.session.add(new_reply)
     db.session.commit()
+
     return jsonify(new_reply.to_dict()), 201
 
-@routes_app.route('/replies/<int:reply_id>', methods=['GET'])
+@routes_app.route('/replies/<int:id>', methods=['GET'])
 @jwt_required()
-def get_reply(reply_id):
-    reply = Reply.query.get_or_404(reply_id)
+def get_reply(id):
+    reply = Reply.query.get_or_404(id)
     return jsonify(reply.to_dict()), 200
 
-@routes_app.route('/replies/<int:reply_id>', methods=['PUT'])
+@routes_app.route('/replies/<int:id>', methods=['PUT'])
 @jwt_required()
-def update_reply(reply_id):
-    reply = Reply.query.get_or_404(reply_id)
+def update_reply(id):
+    reply = Reply.query.get_or_404(id)
     data = request.get_json()
-    
+
     reply.content = data.get('content', reply.content)
     
     db.session.commit()
     return jsonify(reply.to_dict()), 200
 
-@routes_app.route('/replies/<int:reply_id>', methods=['DELETE'])
+@routes_app.route('/replies/<int:id>', methods=['DELETE'])
 @jwt_required()
-def delete_reply(reply_id):
-    reply = Reply.query.get_or_404(reply_id)
+def delete_reply(id):
+    reply = Reply.query.get_or_404(id)
     db.session.delete(reply)
     db.session.commit()
-    return jsonify({'message': 'Reply deleted successfully'}), 200
+    
+    return jsonify({'message': 'Reply deleted successfully.'}), 200
+
+# ---------- ADOPTION ROUTES ----------
+@routes_app.route('/adoptions', methods=['GET'])
+@jwt_required()
+def get_adoptions():
+    adoptions = Adoption.query.all()
+    return jsonify([adoption.to_dict() for adoption in adoptions]), 200
+
+@routes_app.route('/adoptions', methods=['POST'])
+@jwt_required()
+def create_adoption():
+    data = request.get_json()
+    
+    if not all([data.get('user_id'), data.get('pet_id'), data.get('adoption_date')]):
+        return abort(400, description="Missing required fields.")
+    
+    new_adoption = Adoption(
+        user_id=data['user_id'],
+        pet_id=data['pet_id'],
+        adoption_date=data['adoption_date']
+    )
+    db.session.add(new_adoption)
+    db.session.commit()
+    
+    return jsonify(new_adoption.to_dict()), 201
+
+@routes_app.route('/adoptions/<int:id>', methods=['GET'])
+@jwt_required()
+def get_adoption(id):
+    adoption = Adoption.query.get_or_404(id)
+    return jsonify(adoption.to_dict()), 200
+
+@routes_app.route('/adoptions/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_adoption(id):
+    adoption = Adoption.query.get_or_404(id)
+    data = request.get_json()
+
+    adoption.user_id = data.get('user_id', adoption.user_id)
+    adoption.pet_id = data.get('pet_id', adoption.pet_id)
+    adoption.adoption_date = data.get('adoption_date', adoption.adoption_date)
+    
+    db.session.commit()
+    return jsonify(adoption.to_dict()), 200
+
+@routes_app.route('/adoptions/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_adoption(id):
+    adoption = Adoption.query.get_or_404(id)
+    db.session.delete(adoption)
+    db.session.commit()
+    
+    return jsonify({'message': 'Adoption deleted successfully.'}), 200
+
+# ---------- FAVORITE ROUTES ----------
+@routes_app.route('/favorites', methods=['GET'])
+@jwt_required()
+def get_favorites():
+    favorites = Favorite.query.all()
+    return jsonify([favorite.to_dict() for favorite in favorites]), 200
+
+@routes_app.route('/favorites', methods=['POST'])
+@jwt_required()
+def create_favorite():
+    data = request.get_json()
+    
+    if not all([data.get('user_id'), data.get('pet_id')]):
+        return abort(400, description="Missing required fields.")
+    
+    new_favorite = Favorite(
+        user_id=data['user_id'],
+        pet_id=data['pet_id']
+    )
+    db.session.add(new_favorite)
+    db.session.commit()
+
+    return jsonify(new_favorite.to_dict()), 201
+
+@routes_app.route('/favorites/<int:id>', methods=['GET'])
+@jwt_required()
+def get_favorite(id):
+    favorite = Favorite.query.get_or_404(id)
+    return jsonify(favorite.to_dict()), 200
+
+@routes_app.route('/favorites/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorite(id):
+    favorite = Favorite.query.get_or_404(id)
+    db.session.delete(favorite)
+    db.session.commit()
+    
+    return jsonify({'message': 'Favorite deleted successfully.'}), 200
+
+
+    # ---------- ADOPTION REQUEST ROUTES ----------
+@routes_app.route('/adoption-requests', methods=['GET'])
+@jwt_required()
+def get_adoption_requests():
+    requests = AdoptionRequest.query.all()
+    return jsonify([request.to_dict() for request in requests]), 200
+
+@routes_app.route('/adoption-requests', methods=['POST'])
+@jwt_required()
+def create_adoption_request():
+    data = request.get_json()
+
+    if not all([data.get('message'), data.get('user_id'), data.get('pet_id')]):
+        return abort(400, description="Missing required fields.")
+
+    new_adoption_request = AdoptionRequest(
+        message=data['message'],
+        user_id=data['user_id'],
+        pet_id=data['pet_id'],
+        status=data.get('status', 'pending')
+    )
+    
+    db.session.add(new_adoption_request)
+    db.session.commit()
+
+    return jsonify(new_adoption_request.to_dict()), 201
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['GET'])
+@jwt_required()
+def get_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    return jsonify(adoption_request.to_dict()), 200
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['PUT'])
+@jwt_required()
+def update_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    data = request.get_json()
+
+    adoption_request.message = data.get('message', adoption_request.message)
+    adoption_request.status = data.get('status', adoption_request.status)
+
+    db.session.commit()
+    return jsonify(adoption_request.to_dict()), 200
+
+@routes_app.route('/adoption-requests/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_adoption_request(id):
+    adoption_request = AdoptionRequest.query.get_or_404(id)
+    db.session.delete(adoption_request)
+    db.session.commit()
+
+    return jsonify({'message': 'Adoption request deleted successfully.'}), 200

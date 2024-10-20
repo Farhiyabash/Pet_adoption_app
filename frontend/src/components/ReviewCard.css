@@ -1,0 +1,17 @@
+/* src/pages/ReviewCard.css */
+.review-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.review-card h3 {
+    margin: 0;
+}
+
+.review-card p {
+    margin: 5px 0;
+}
+
+/* Add additional styles as needed */

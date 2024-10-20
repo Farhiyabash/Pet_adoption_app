@@ -26,7 +26,6 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
 # --------------- PET MODEL ---------------
 class Pet(db.Model):
     __tablename__ = 'pets'
@@ -35,6 +34,7 @@ class Pet(db.Model):
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=True)
+    image_url = db.Column(db.String(200), nullable=True)  # Add image_url field
     pet_type_id = db.Column(db.Integer, db.ForeignKey('pet_types.id'), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -47,6 +47,7 @@ class Pet(db.Model):
             'name': self.name,
             'age': self.age,
             'description': self.description,
+            'image_url': self.image_url,  # Include image_url in the dict
             'pet_type_id': self.pet_type_id,
             'owner_id': self.owner_id
         }
@@ -144,4 +145,44 @@ class Reply(db.Model):
             'content': self.content,
             'user_id': self.user_id,
             'review_id': self.review_id
+        }
+
+
+# --------------- ADOPTION MODEL ---------------
+class Adoption(db.Model):
+    __tablename__ = 'adoptions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+    adoption_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='adoptions')
+    pet = db.relationship('Pet', backref='adoptions')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'pet_id': self.pet_id,
+            'adoption_date': self.adoption_date
+        }
+
+
+# --------------- FAVORITE MODEL ---------------
+class Favorite(db.Model):
+    __tablename__ = 'favorites'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+
+    user = db.relationship('User', backref='favorites')
+    pet = db.relationship('Pet', backref='favorites')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'pet_id': self.pet_id
         }
