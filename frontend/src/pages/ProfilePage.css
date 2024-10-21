@@ -27,3 +27,12 @@ body {
     background-color: #a20052; /* Darker pink for hover effect */
     border-color: #a20052; /* Darker pink for hover effect */
 }
+.welcome-message {
+    color: #FF69B4; /* Change this to your desired color */
+    animation: bounce 1s; /* Example animation; adjust as needed */
+    font-size: 1.5rem; /* Adjust font size */
+    margin: 20px 0; /* Add some margin */
+    text-align: center; /* Center align the text */
+}
+
+/* Add any other desired styles */

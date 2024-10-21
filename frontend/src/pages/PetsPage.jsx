@@ -46,10 +46,13 @@ const PetsPage = () => {
             <HomeNavbar /> {/* Display the navigation bar */}
             <div className="container mt-5">
                 {profile && (
-                    <div className="alert alert-success text-center">
-                        <h2 className="welcome-message animated bounce">Welcome back, {profile.name}! Your pawsome adventure starts now! Let’s find your next furry friend!</h2>
+                    <div className="alert alert-success text-center mt-3">
+                        <h2 className="welcome-message animated bounce">
+                            Welcome back, {profile.name}! Your pawsome adventure starts now! Let’s find your next furry friend!
+                        </h2>
                     </div>
                 )}
+                <h1 className="adoption-header text-center animated fadeIn">These are the Adoption Pets!</h1>
                 <PetList pets={pets} />
             </div>
         </div>

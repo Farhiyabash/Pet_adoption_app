@@ -46,6 +46,8 @@ const PetDetails = () => {
                         </div>
                         <div className="col-md-7">
                             <div className="card-body">
+                            <h1 className="adoption-header text-center animated fadeIn">These are the Adoption Pets!</h1>
+
                                 <h3 className="card-title pet-name">{pet.name}</h3>
                                 <p className="card-text"><strong>Breed:</strong> {pet.breed}</p>
                                 <p className="card-text"><strong>Age:</strong> {pet.age ? `${pet.age} years` : 'Unknown age'}</p>

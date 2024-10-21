@@ -20,3 +20,32 @@
         transform: translateY(-5px);
     }
 }
+.adoption-header {
+    font-size: 2.5rem; /* Adjust font size as needed */
+    font-weight: bold; /* Bold text */
+    color: #d63384; /* Dark pink color */
+    margin: 20px 0; /* Spacing above and below */
+    animation-duration: 1.5s; /* Animation duration */
+}
+
+/* Animation effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Applying the animation class */
+.animated.fadeIn {
+    animation-name: fadeIn; /* Assign the fadeIn animation */
+}
+.adoption-header {
+    margin-top: 20px; /* Adds space above the header */
+    font-size: 2.5rem; /* Adjust font size */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Adding shadow for better visibility */
+}
