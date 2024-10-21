@@ -4,6 +4,7 @@ from .extensions import db, jwt, cors
 from .models import Pet, User, AdoptionRequest, Breed, PetType
 from .routes import routes_app
 from .config import Config
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
@@ -11,9 +12,9 @@ def create_app():
     # Load configuration from the Config class
     app.config.from_object(Config)
 
-    # Initialize CORS for the application with specified origins
-    cors.init_app(app, resources={r"*": {"origins": Config.CORS_ORIGINS}})
-
+    # Initialize CORS with specified origins
+    CORS(app, resources={r"/*": {"origins": Config.CORS_ORIGINS}})
+    
     # Initialize database and migration support
     db.init_app(app)
     migrate = Migrate(app, db)

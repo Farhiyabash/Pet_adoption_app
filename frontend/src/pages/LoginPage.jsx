@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { loginUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
-import './LoginPage.css'; // Import custom CSS
 
-const LoginPage = () => {
+const LoginPage = ({ setIsAuthenticated }) => { // Accept setIsAuthenticated as a prop
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,12 +19,10 @@ const LoginPage = () => {
             const data = await loginUser(credentials);
             localStorage.setItem('access_token', data.accessToken);
             localStorage.setItem('refresh_token', data.refreshToken);
+            setIsAuthenticated(true); // Set authenticated state to true
             setSuccess('Successfully logged in!');
             setError('');
-            
-            setTimeout(() => {
-                navigate('/pets'); // Redirect to the profile page after 2 seconds
-            }, 2000);
+            navigate('/pets'); // Redirect to the pets page immediately
         } catch (error) {
             console.error('Login failed:', error);
             setError('Login failed. Please check your credentials.');

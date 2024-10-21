@@ -53,10 +53,10 @@ const LandingPage = () => {
                                 <a className="nav-link" href="#newsletter">Subscribe</a>
                             </li>
                             <li className="nav-item">
-                                <a className="btn btn-primary" href="#signup">Sign Up</a>
+                                <a className="btn btn-primary" href="signup">Sign Up</a>
                             </li>
                             <li className="nav-item">
-                                <a className="btn btn-outline-primary ms-2" href="#login">Login</a>
+                                <a className="btn btn-outline-primary ms-2" href="/login">Login</a>
                             </li>
                         </ul>
                     </div>

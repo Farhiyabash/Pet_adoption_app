@@ -1,15 +1,15 @@
-// src/pages/PetsPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import { fetchPets } from '../services/PetService';
+import { getUserProfile } from '../services/userService'; // Import the function to get user profile
 import PetList from '../components/PetList';
-import Spinner from '../components/Spinner'; // You might want to create a spinner component for loading states
-import Alert from '../components/Alert'; // An alert component for error handling
-
-const PetsPage = () => {
+import Spinner from '../components/Spinner'; // Spinner component for loading states
+import Alert from '../components/Alert'; // Alert component for error handling
+import HomeNavbar from '../components/HomeNavbar'; // Import the HomeNavbar component
+import './PetsPage.css';const PetsPage = () => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [profile, setProfile] = useState(null); // State to hold user profile
 
     useEffect(() => {
         const loadPets = async () => {
@@ -23,7 +23,17 @@ const PetsPage = () => {
             }
         };
 
+        const fetchProfile = async () => {
+            try {
+                const data = await getUserProfile();
+                setProfile(data); // Set the profile state
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
         loadPets();
+        fetchProfile(); // Fetch profile data
     }, []);
 
     if (loading) return <Spinner />;
@@ -31,8 +41,16 @@ const PetsPage = () => {
 
     return (
         <div className="pets-page">
-            <h1>Available Pets for Adoption</h1>
-            <PetList pets={pets} />
+            <HomeNavbar /> {/* Display the navigation bar */}
+            <div className="container mt-5">
+                {profile && (
+                    <div className="alert alert-success text-center">
+                        <h2 className="welcome-message animated bounce">Welcome back, {profile.name}! Your pawsome adventure starts now! Let’s find your next furry friend!</h2>
+                    </div>
+                )}
+                <h1>Available Pets for Adoption</h1>
+                <PetList pets={pets} />
+            </div>
         </div>
     );
 };
