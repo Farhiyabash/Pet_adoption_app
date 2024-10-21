@@ -1,6 +1,5 @@
 import os
 
-
 class Config:
     # Secret key for signing cookies and other cryptographic operations
     SECRET_KEY = os.environ.get('SECRET_KEY', '9ec3aefda2fb71ca09b2c2ce00448b60')
@@ -18,5 +17,14 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = 7 * 24 * 60 * 60  # Refresh token expiration time in seconds (7 days)
 
     # CORS configuration
-    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')  # Allowed origin
+    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')  # Specify allowed origins
     CORS_SUPPORTS_CREDENTIALS = True  # Allow cookies with cross-origin requests
+
+    # Additional configurations (if needed)
+    # LOGGING_LEVEL = os.environ.get('LOGGING_LEVEL', 'INFO')  # Configure logging level
+    # PAGE_SIZE = os.environ.get('PAGE_SIZE', 10)  # For pagination
+
+# Example usage:
+# In your app setup, you can load the config like this:
+# from config import Config
+# app.config.from_object(Config)
