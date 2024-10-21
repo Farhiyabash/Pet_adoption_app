@@ -1,71 +1,66 @@
 // src/pages/PetDetails.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPetById } from '../services/PetService'; // Import the service to fetch pet details
-import AdoptionRequestForm from '../components/AdoptionRequestForm'; // Import the AdoptionRequestForm
-import Spinner from '../components/Spinner'; // Import Spinner component
-import Alert from '../components/Alert'; // Import Alert component
-import { getAccessToken } from '../utils/tokenUtils'; // Utility to get the access token
+import { fetchPetById } from '../services/PetService'; // Import API call
+import './PetDetails.css'; // Import custom CSS for additional styling
 
 const PetDetails = () => {
-    const { id } = useParams(); // Extract the pet ID from the URL parameters
-    const [pet, setPet] = useState(null); // State to hold pet details
-    const [loading, setLoading] = useState(true); // State to manage loading state
-    const [error, setError] = useState(null); // State to hold error messages
+    const { id } = useParams(); // Get pet ID from URL
+    const [pet, setPet] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Function to get the current user's ID from the token
-    const getCurrentUserId = () => {
-        const token = getAccessToken();
-        if (token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT to get user ID
-            return decodedToken.userId; // Adjust according to your token's payload structure
-        }
-        return null; // Return null if no user ID is found
-    };
-
-    // Fetch pet details when the component mounts
     useEffect(() => {
-        const loadPetDetails = async () => {
+        const getPetDetails = async () => {
             try {
-                const petData = await fetchPetById(id); // Fetch pet details by ID
-                setPet(petData); // Set the pet data into state
+                const petData = await fetchPetById(id); // Fetch pet by ID
+                setPet(petData);
             } catch (err) {
-                setError(err.message); // Set error message if fetch fails
+                setError(err.message);
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         };
 
-        loadPetDetails(); // Invoke the fetch function
+        getPetDetails();
     }, [id]);
 
-    // Show loading spinner while fetching data
-    if (loading) return <Spinner />;
-    // Show error alert if there is an error
-    if (error) return <Alert message={error} type="danger" />;
-    // Show message if no pet details are found
-    if (!pet) return <div>No pet details found.</div>;
+    if (loading) {
+        return <p className="text-center">Loading...</p>;
+    }
 
-    // Get the current user's ID for the adoption request form
-    const userId = getCurrentUserId();
+    if (error) {
+        return <p className="text-center text-danger">Error: {error}</p>;
+    }
 
     return (
-        <div className="container pet-details mt-5">
-            <div className="row">
-                <div className="col-md-6">
-                    <img src={pet.imageUrl} alt={pet.name} className="img-fluid mb-3 rounded" />
+        <div className="container mt-5">
+            {pet ? (
+                <div className="card shadow-lg p-4 pet-details-card">
+                    <div className="row g-0">
+                        <div className="col-md-5">
+                            <img 
+                                src={pet.imageUrl || 'default-image-url.jpg'} 
+                                alt={pet.name || 'Unknown Pet'} 
+                                className="img-fluid pet-image"
+                            />
+                        </div>
+                        <div className="col-md-7">
+                            <div className="card-body">
+                                <h3 className="card-title pet-name">{pet.name}</h3>
+                                <p className="card-text"><strong>Breed:</strong> {pet.breed}</p>
+                                <p className="card-text"><strong>Age:</strong> {pet.age ? `${pet.age} years` : 'Unknown age'}</p>
+                                <p className="card-text"><strong>Description:</strong> {pet.description || 'No description available.'}</p>
+                                <div className="mt-4">
+                                    <button className="btn btn-primary adopt-button">Adopt Me!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="col-md-6">
-                    <h1>{pet.name}</h1>
-                    <p><strong>Breed:</strong> {pet.breed}</p>
-                    <p><strong>Age:</strong> {pet.age} years</p>
-                    <p><strong>Description:</strong> {pet.description}</p>
-                    <button className="btn btn-success">Adopt {pet.name}</button>
-                </div>
-            </div>
-            <hr />
-            {userId && <AdoptionRequestForm userId={userId} petId={pet.id} />} {/* Pass user ID to the form if available */}
+            ) : (
+                <p>No details available for this pet.</p>
+            )}
         </div>
     );
 };

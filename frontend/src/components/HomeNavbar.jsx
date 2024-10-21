@@ -1,8 +1,11 @@
+// src/components/HomeNavbar.jsx
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../services/userService';
+import './HomeNavbar.css'; // Import custom CSS for additional styling
 
-const HomeNavbar = ({ setIsAuthenticated }) => { 
+const HomeNavbar = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -12,9 +15,9 @@ const HomeNavbar = ({ setIsAuthenticated }) => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm animated-navbar">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/pets">Pet Adoption</Link>
+                <Link className="navbar-brand text-dark" to="/pets">Pawsitive Connections</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>

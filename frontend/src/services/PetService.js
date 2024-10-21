@@ -25,6 +25,26 @@ export const fetchPets = async () => {
     }
 };
 
+// Fetch a pet by ID
+export const fetchPetById = async (petId) => {
+    const token = getAccessToken();
+
+    if (!token || isTokenExpired(token)) {
+        await refreshAccessToken();
+    }
+
+    try {
+        const newToken = getAccessToken(); // Get new token if refreshed
+        const response = await axios.get(`${API_URL}/${petId}`, {
+            headers: { Authorization: `Bearer ${newToken}` },
+        });
+        return response.data; // Return the pet data for the given ID
+    } catch (error) {
+        console.error(`Failed to fetch pet with ID ${petId}:`, error.response?.data || error.message);
+        throw new Error(error.response?.data?.message || `Failed to fetch pet with ID ${petId}`);
+    }
+};
+
 // Add a new pet
 export const addPet = async (petData) => {
     const token = getAccessToken();

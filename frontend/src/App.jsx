@@ -5,7 +5,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import PetsPage from './pages/PetsPage';
-import AdoptionsPage from './pages/AdoptionsPage'; // Import the AdoptionsPage
+import AdoptionsPage from './pages/AdoptionsPage';
+import PetDetails from './components/PetDetails'; // Import the PetDetails page
 import PrivateRoute from './components/PrivateRoute';
 import HomeNavbar from './components/HomeNavbar';
 
@@ -46,7 +47,17 @@ const App = () => {
             path="/adoptions" 
             element={
               <PrivateRoute>
-                <AdoptionsPage /> {/* Protected route for Adoption Requests */}
+                <AdoptionsPage />
+              </PrivateRoute>
+            } 
+          />
+
+          {/* Pet Details route */}
+          <Route 
+            path="/pets/:id" 
+            element={
+              <PrivateRoute>
+                <PetDetails /> {/* PetDetails component for specific pet */}
               </PrivateRoute>
             } 
           />

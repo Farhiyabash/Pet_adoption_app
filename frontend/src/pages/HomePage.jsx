@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
 import HomeNavbar from '../components/HomeNavbar';
 import PetList from '../components/PetList'; // Import the PetList component
-import { getUserProfile } from '../api';// Function to fetch user profile data
-import { fetchPets } from '../api';// Function to fetch pets data
+import { getUserProfile } from '../services/userService';// Function to fetch user profile data
+import { fetchPets } from '../services/PetService';// Function to fetch pets data
 
 const HomePage = () => {
     const [user, setUser] = useState(null);
