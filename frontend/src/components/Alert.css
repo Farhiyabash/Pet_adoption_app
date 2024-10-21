@@ -1,9 +1,0 @@
-/* src/components/Alert.css */
-.alert {
-    margin: 20px 0;
-    padding: 15px;
-    border: 1px solid red;
-    background-color: #f8d7da;
-    color: #721c24;
-    border-radius: 4px;
-}
