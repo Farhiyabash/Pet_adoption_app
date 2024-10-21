@@ -1,5 +1,3 @@
-// src/components/PetList.jsx
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import PetCard from './PetCard';
@@ -28,7 +26,7 @@ PetList.propTypes = {
             breed: PropTypes.string.isRequired,
             age: PropTypes.number.isRequired,
             description: PropTypes.string.isRequired,
-            imageUrl: PropTypes.string.isRequired,
+            image_url: PropTypes.string.isRequired,
         })
     ).isRequired,
 };

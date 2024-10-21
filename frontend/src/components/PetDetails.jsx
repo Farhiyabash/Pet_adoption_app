@@ -1,4 +1,3 @@
-// src/pages/PetDetails.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPetById } from '../services/PetService'; // Import API call
@@ -40,7 +39,7 @@ const PetDetails = () => {
                     <div className="row g-0">
                         <div className="col-md-5">
                             <img 
-                                src={pet.imageUrl || 'default-image-url.jpg'} 
+                                src={pet.image_url || 'default-image-url.jpg'} 
                                 alt={pet.name || 'Unknown Pet'} 
                                 className="img-fluid pet-image"
                             />
