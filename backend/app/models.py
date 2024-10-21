@@ -34,12 +34,10 @@ class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.String(255), nullable=True)
     pet_type_id = db.Column(db.Integer, db.ForeignKey('pet_types.id'), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    pet_type = db.relationship('PetType', backref='pets')
-    owner = db.relationship('User', backref='pets')
+    image_url = db.Column(db.String(255), nullable=True)  # Ensure this is defined
 
     def to_dict(self):
         return {
@@ -48,9 +46,9 @@ class Pet(db.Model):
             'age': self.age,
             'description': self.description,
             'pet_type_id': self.pet_type_id,
-            'owner_id': self.owner_id
+            'owner_id': self.owner_id,
+            'image_url': self.image_url  # Make sure this is included
         }
-
 
 # --------------- BREED MODEL ---------------
 class Breed(db.Model):

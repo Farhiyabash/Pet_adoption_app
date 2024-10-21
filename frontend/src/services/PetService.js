@@ -1,23 +1,24 @@
-// src/services/PetService.js
-
 import axios from 'axios';
 import { getAccessToken, isTokenExpired, refreshAccessToken } from '../utils/tokenUtils';
 
-const API_URL = 'http://127.0.0.1:5000/pets'; // Update with your backend API URL
+// Base API URL for pets
+const API_URL = 'http://127.0.0.1:5000/pets'; // Ensure this is the correct endpoint
 
 // Fetch all pets
 export const fetchPets = async () => {
     const token = getAccessToken();
 
+    // Check if the token is expired and refresh if necessary
     if (!token || isTokenExpired(token)) {
         await refreshAccessToken();
     }
 
     try {
-        const newToken = getAccessToken(); // Get new token if refreshed
+        const newToken = getAccessToken(); // Get the latest token
         const response = await axios.get(API_URL, {
             headers: { Authorization: `Bearer ${newToken}` },
         });
+        console.log('Fetched pets:', response.data); // Log the response to verify
         return response.data; // Return pets data
     } catch (error) {
         console.error('Failed to fetch pets:', error.response?.data || error.message);
@@ -34,11 +35,11 @@ export const fetchPetById = async (petId) => {
     }
 
     try {
-        const newToken = getAccessToken(); // Get new token if refreshed
+        const newToken = getAccessToken();
         const response = await axios.get(`${API_URL}/${petId}`, {
             headers: { Authorization: `Bearer ${newToken}` },
         });
-        return response.data; // Return the pet data for the given ID
+        return response.data;
     } catch (error) {
         console.error(`Failed to fetch pet with ID ${petId}:`, error.response?.data || error.message);
         throw new Error(error.response?.data?.message || `Failed to fetch pet with ID ${petId}`);
@@ -54,11 +55,11 @@ export const addPet = async (petData) => {
     }
 
     try {
-        const newToken = getAccessToken(); // Get new token if refreshed
+        const newToken = getAccessToken();
         const response = await axios.post(API_URL, petData, {
             headers: { Authorization: `Bearer ${newToken}` },
         });
-        return response.data; // Return the added pet data
+        return response.data;
     } catch (error) {
         console.error('Failed to add pet:', error.response?.data || error.message);
         throw new Error(error.response?.data?.message || 'Failed to add pet');
@@ -74,11 +75,11 @@ export const updatePet = async (petId, petData) => {
     }
 
     try {
-        const newToken = getAccessToken(); // Get new token if refreshed
+        const newToken = getAccessToken();
         const response = await axios.put(`${API_URL}/${petId}`, petData, {
             headers: { Authorization: `Bearer ${newToken}` },
         });
-        return response.data; // Return the updated pet data
+        return response.data;
     } catch (error) {
         console.error('Failed to update pet:', error.response?.data || error.message);
         throw new Error(error.response?.data?.message || 'Failed to update pet');
@@ -94,7 +95,7 @@ export const deletePet = async (petId) => {
     }
 
     try {
-        const newToken = getAccessToken(); // Get new token if refreshed
+        const newToken = getAccessToken();
         await axios.delete(`${API_URL}/${petId}`, {
             headers: { Authorization: `Bearer ${newToken}` },
         });

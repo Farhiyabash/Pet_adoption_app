@@ -1,5 +1,6 @@
 import os
 
+
 class Config:
     # Secret key for signing cookies and other cryptographic operations
     SECRET_KEY = os.environ.get('SECRET_KEY', '9ec3aefda2fb71ca09b2c2ce00448b60')
@@ -19,4 +20,3 @@ class Config:
     # CORS configuration
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')  # Allowed origin
     CORS_SUPPORTS_CREDENTIALS = True  # Allow cookies with cross-origin requests
-

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPets } from '../services/PetService';
-import { getUserProfile } from '../services/userService'; // Import the function to get user profile
+import { getUserProfile } from '../services/userService';
 import PetList from '../components/PetList';
 import Spinner from '../components/Spinner'; // Spinner component for loading states
 import Alert from '../components/Alert'; // Alert component for error handling
 import HomeNavbar from '../components/HomeNavbar'; // Import the HomeNavbar component
-import './PetsPage.css';const PetsPage = () => {
+import './PetsPage.css';
+
+const PetsPage = () => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -48,7 +50,6 @@ import './PetsPage.css';const PetsPage = () => {
                         <h2 className="welcome-message animated bounce">Welcome back, {profile.name}! Your pawsome adventure starts now! Let’s find your next furry friend!</h2>
                     </div>
                 )}
-                <h1>Available Pets for Adoption</h1>
                 <PetList pets={pets} />
             </div>
         </div>

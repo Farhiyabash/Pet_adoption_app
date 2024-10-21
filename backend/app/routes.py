@@ -112,13 +112,24 @@ def get_user(user_id):
 @routes_app.route('/pets', methods=['GET'])
 @jwt_required()
 def get_pets():
+    """
+    Get all pets.
+    Requires JWT for authorization.
+    """
     pets = Pet.query.all()
     return jsonify([pet.to_dict() for pet in pets]), 200
 
 @routes_app.route('/pets', methods=['POST'])
 @jwt_required()
 def create_pet():
+    """
+    Create a new pet.
+    Requires JWT for authorization.
+    Expects a JSON body with name, age, pet_type_id, owner_id, and optionally description and image_url.
+    """
     data = request.get_json()
+    
+    # Check for required fields
     if not all([data.get('name'), data.get('age'), data.get('pet_type_id'), data.get('owner_id')]):
         return abort(400, description="Missing required fields.")
     
@@ -127,8 +138,10 @@ def create_pet():
         age=data['age'],
         description=data.get('description', ''),
         pet_type_id=data['pet_type_id'],
-        owner_id=data['owner_id']
+        owner_id=data['owner_id'],
+        image_url=data.get('image_url', '')  # Include image_url during creation
     )
+    
     db.session.add(new_pet)
     db.session.commit()
     
@@ -137,15 +150,54 @@ def create_pet():
 @routes_app.route('/pets/<int:id>', methods=['GET'])
 @jwt_required()
 def get_pet(id):
+    """
+    Get a specific pet by ID.
+    Requires JWT for authorization.
+    """
     pet = Pet.query.get_or_404(id)
+    return jsonify({
+        'id': pet.id,
+        'name': pet.name,
+        'age': pet.age,
+        'description': pet.description,
+        'pet_type_id': pet.pet_type_id,
+        'owner_id': pet.owner_id,
+        'image_url': pet.image_url  # Include image_url in the response
+    }), 200
+
+@routes_app.route('/pets/<int:id>/image', methods=['PUT'])
+@jwt_required()
+def update_pet_image(id):
+    """
+    Update the image URL of a specific pet.
+    Requires JWT for authorization.
+    Expects a JSON body with image_url.
+    """
+    pet = Pet.query.get_or_404(id)
+    data = request.get_json()
+    
+    # Check if image_url is provided
+    if 'image_url' not in data:
+        return abort(400, description="Image URL is required.")
+    
+    # Update the pet's image URL
+    pet.image_url = data['image_url']
+    db.session.commit()
+    
     return jsonify(pet.to_dict()), 200
 
 @routes_app.route('/pets/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_pet(id):
+    """
+    Update a specific pet's details.
+    Requires JWT for authorization.
+    Expects a JSON body with any combination of name, age, description, pet_type_id, owner_id.
+    """
     pet = Pet.query.get_or_404(id)
     data = request.get_json()
 
+    # Update only the fields provided in the request
     pet.name = data.get('name', pet.name)
     pet.age = data.get('age', pet.age)
     pet.description = data.get('description', pet.description)
@@ -158,6 +210,10 @@ def update_pet(id):
 @routes_app.route('/pets/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_pet(id):
+    """
+    Delete a specific pet by ID.
+    Requires JWT for authorization.
+    """
     pet = Pet.query.get_or_404(id)
     db.session.delete(pet)
     try:
@@ -166,7 +222,6 @@ def delete_pet(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
-
 # ---------- BREED ROUTES ----------
 @routes_app.route('/breeds', methods=['GET'])
 @jwt_required()

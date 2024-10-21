@@ -1,4 +1,3 @@
-// src/components/PetCard.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -9,15 +8,18 @@ const PetCard = ({ pet }) => {
         <div className="col-md-4 mb-4">
             <div className="card pet-card h-100 shadow-sm rounded">
                 <img 
-                    src={pet.imageUrl || 'default-image-url.jpg'} // Fallback for image
-                    alt={pet.name || 'Unknown Pet'} 
+                    src={pet.image_url || 'hhttps://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'} // Fallback for image
+                    alt={pet.name ? `${pet.name} the ${pet.breed}` : 'Unknown Pet'} 
                     className="card-img-top pet-image" 
                 />
                 <div className="card-body">
                     <h5 className="card-title">{pet.name || 'Unknown Pet'}</h5>
                     <p className="card-text"><strong>Breed:</strong> {pet.breed || 'Unknown Breed'}</p>
                     <p className="card-text"><strong>Age:</strong> {pet.age ? `${pet.age} years` : 'Age not specified'}</p>
-                    <p className="card-text"><strong>Description:</strong> {pet.description || 'No description available.'}</p>
+                    <p className="card-text">
+                        <strong>Description:</strong> 
+                        {pet.description.length > 100 ? `${pet.description.substring(0, 97)}...` : pet.description}
+                    </p>
                     <Link to={`/pets/${pet.id}`} className="btn btn-primary adopt-button">View Details</Link>
                 </div>
             </div>
@@ -32,7 +34,7 @@ PetCard.propTypes = {
         breed: PropTypes.string,
         age: PropTypes.number,
         description: PropTypes.string,
-        imageUrl: PropTypes.string,
+        image_url: PropTypes.string, // Ensure this matches the API response
     }).isRequired,
 };
 

@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_migrate import Migrate
-from .extensions import db, jwt, cors
+from flask_cors import CORS
+from .extensions import db, jwt
 from .models import Pet, User, AdoptionRequest, Breed, PetType
 from .routes import routes_app
 from .config import Config
-from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
@@ -14,7 +14,7 @@ def create_app():
 
     # Initialize CORS with specified origins
     CORS(app, resources={r"/*": {"origins": Config.CORS_ORIGINS}})
-    
+
     # Initialize database and migration support
     db.init_app(app)
     migrate = Migrate(app, db)
